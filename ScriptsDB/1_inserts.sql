@@ -1,5 +1,8 @@
 -- Inserts iniciales en la Base de datos
 
+-- Deshabilitar el modo de actualizacion seguro
+SET SQL_SAFE_UPDATES = 0;
+
 -- Configuracion de la factura
 INSERT INTO Tipos_Mov(codigo,nombre,movimiento) VALUES 
     ("v","venta",-1),
@@ -297,7 +300,15 @@ INSERT INTO Tipos(nombre) VALUES
     ("Televisores")
 ;
 
+-- Roles de Usurios
+INSERT INTO Roles(rol) VALUES 
+    ("administrador"),
+    ("cliente"),
+    ("vendedor")
+;
+
 INSERT INTO Usuarios(primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,correo,contrasena,num_telefono,direccion_id,rol,num_tarjeta) VALUES
-    ("Nelson","Jafet","Sambula","Palacios","nelson.sambula@unah.hn","nelson1234","9898-9080",2,2,AES_ENCRYPT("1728-2823-1223-2814","admin")),
-    ("Luis", "Gerardo", "Gutierrez", "Perdomo","lggutierrez@unah.hn", "luis1234", "98891920", 11, 3,"")
+    ("Admin","Admin","Admin","Admin","admin",AES_ENCRYPT("admin1234","admin"),"admin",15,1,AES_ENCRYPT("0000-0000","admin")),
+    ("Nelson","Jafet","Sambula","Palacios","nelson.sambula@unah.hn",AES_ENCRYPT("nelson1234","admin"),"9898-9080",2,2,AES_ENCRYPT("0000-0000","admin")),
+    ("Luis", "Gerardo", "Gutierrez", "Perdomo","lggutierrez@unah.hn",AES_ENCRYPT("luis1234","admin") , "98891920", 11, 3,"")
 ;

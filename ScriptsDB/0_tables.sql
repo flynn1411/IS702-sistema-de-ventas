@@ -1,5 +1,7 @@
 -- Creando Base de datos si no existe
-CREATE DATABASE IF NOT EXISTS SistemaVentas CHARACTER SET utf8;
+DROP DATABASE IF EXISTS SistemaVentas;
+-- CREATE DATABASE IF NOT EXISTS SistemaVentas CHARACTER SET utf8;
+CREATE DATABASE SistemaVentas CHARACTER SET utf8;
 USE SistemaVentas;
 
 CREATE TABLE IF NOT EXISTS Regiones (
@@ -52,11 +54,12 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     primer_apellido VARCHAR(30) NOT NULL,
     segundo_apellido VARCHAR(30),
     correo VARCHAR(50),
-    contrasena VARCHAR(100) NOT NULL,
+    contrasena VARBINARY(100) NOT NULL,
     num_telefono VARCHAR(30),
     direccion_id INT,
     rol INT NOT NULL,
-    num_tarjeta VARCHAR(20),
+    num_tarjeta VARBINARY(30),
+    fecha_registro TIMESTAMP NOT NULL,
     UNIQUE KEY (correo),
     FOREIGN KEY (direccion_id) REFERENCES Direcciones(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
@@ -80,6 +83,7 @@ CREATE TABLE IF NOT EXISTS Proveedores (
     correo VARCHAR(50) NOT NULL,
     num_telefono VARCHAR(30),
     direccion_id INT NOT NULL,
+    UNIQUE (correo),
     FOREIGN KEY (direccion_id) REFERENCES Direcciones(id)
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Proveedores';
@@ -143,7 +147,11 @@ CREATE TABLE IF NOT EXISTS Mov_Inventario (
     movimiento_id INT NOT NULL,
     cantidad INT NOT NULL,
     precio DECIMAL(10,2),
-    fecha_mov TIMESTAMP NOT NULL
+    fecha_mov TIMESTAMP NOT NULL,
+    FOREIGN KEY (movimiento_id) REFERENCES Tipos_Mov(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES Productos(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Movimientos de Invntarios';
 
 CREATE TABLE IF NOT EXISTS Tipo_Impuestos (
@@ -251,7 +259,7 @@ CREATE TABLE IF NOT EXISTS Facturas (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Facturas';
 
-CREATE TABLE Facturas_x_Producos (
+CREATE TABLE Facturas_x_Productos (
     factura_id INT NOT NULL,
     producto_id INT NOT NULL,
     FOREIGN KEY (factura_id) REFERENCES Facturas(id)

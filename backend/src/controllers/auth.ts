@@ -3,39 +3,29 @@ const passport =  require("passport");
 const jwt = require("jsonwebtoken");
 
 export const registerUser = (req: Request & any, res: Response, next: NextFunction) => {
-    console.log("Intentando registrar usuario: ");
     passport.authenticate("local.signup", (err: any, user: any, info: any) => {
+        console.log("err auth: ", err);
+        console.log("info auth: ", info);
+        console.log("user auth: ", user);
         if (err) {
             return next(err);
         }
-
-        if (!user) {
-            return res.status(401).json(info);
-        }
-        return res.status(200).json({user_: user});
+        return res.status(200).json({user, info});
     })(req, res, next);
-    // res.status(200).json({message: "Usario registrado"});
 };
 
 export const loginUser = (req: Request & any, res: Response, next: NextFunction) => {
-    console.log("login body: ", req.body);
-    if (!req.body.username) {
-        return res.status(400).json({ error: "username_required" });
-    }
-
-    if (!req.body.password) {
-        return res.status(400).json({ error: "password_required" });
-    }
-
-    passport.authenticate("local.signup", (err: any, user: any, info: any) => {
+    passport.authenticate("local.signin", (err: any, user: any, info: any) => {
+        console.log("err auth: ", err);
+        console.log("info auth: ", info);
+        console.log("user auth: ", user);
         if (err) {
-            return next(err);
+            return res.status(200).json({user: false, message: info});
         }
-
         if (!user) {
-            return res.status(401).json(info);
+            return res.status(200).json({user: false, message: "El correo no esta registrado"});
         }
-        return res.status(200).json({user, token: user.generateJwt(user)});
+        return res.status(200).json({user, info});
     })(req, res, next);
 };
 

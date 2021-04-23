@@ -5,10 +5,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const auth_1 = __importDefault(require("./auth"));
-const product_1 = __importDefault(require("./product"));
+const facturas_1 = __importDefault(require("./facturas"));
+const facturas_producto_1 = __importDefault(require("./facturas-producto"));
+const inventario_1 = __importDefault(require("./inventario"));
+const ordenes_compra_1 = __importDefault(require("./ordenes-compra"));
+const pagos_1 = __importDefault(require("./pagos"));
+const paquetes_1 = __importDefault(require("./paquetes"));
+const paquetes_producto_1 = __importDefault(require("./paquetes-producto"));
+const productos_1 = __importDefault(require("./productos"));
 const router = express_1.Router();
-const db = require("../database");
 router.use("/auth", auth_1.default);
-router.use("/product", product_1.default);
+router.use("/productos", productos_1.default);
+router.use("/ordenes-compra", ordenes_compra_1.default);
+router.use("/inventario", inventario_1.default);
+router.use("/paquetes", paquetes_1.default);
+router.use("/paquetes-producto", paquetes_producto_1.default);
+router.use("/pagos", pagos_1.default);
+router.use("/facturas", facturas_1.default);
+router.use("/factura-producto", facturas_producto_1.default);
 exports.default = router;
 //# sourceMappingURL=index.js.map

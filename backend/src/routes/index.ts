@@ -1,11 +1,24 @@
 import { Router } from "express";
 import AuthRouter from "./auth";
-import ProductRouter from "./product";
+import FacturaRouter from "./facturas";
+import FacturaProductoRouter from "./facturas-producto";
+import InventarioRouter from "./inventario";
+import OrdenCompraRouter from "./ordenes-compra";
+import PagoRouter from "./pagos";
+import PaqueteRouter from "./paquetes";
+import PaqueteProductoRouter from "./paquetes-producto";
+import ProductoRouter from "./productos";
 
 const router = Router();
-const db = require("../database");
 
 router.use("/auth", AuthRouter);
-router.use("/product", ProductRouter);
+router.use("/productos", ProductoRouter);
+router.use("/ordenes-compra", OrdenCompraRouter);
+router.use("/inventario", InventarioRouter);
+router.use("/paquetes", PaqueteRouter);
+router.use("/paquetes-producto", PaqueteProductoRouter);
+router.use("/pagos", PagoRouter);
+router.use("/facturas", FacturaRouter);
+router.use("/factura-producto", FacturaProductoRouter);
 
 export default router;

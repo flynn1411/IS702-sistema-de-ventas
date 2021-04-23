@@ -12,6 +12,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 // Inicializaciones
 require("./lib/passport");
+app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 // Middlewares
 app.use(passport.initialize());
 app.use(passport.session());
@@ -22,6 +23,5 @@ app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use("/api/v1", index_1.default);
-app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 module.exports = app;
 //# sourceMappingURL=app.js.map

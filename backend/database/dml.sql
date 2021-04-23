@@ -48,13 +48,13 @@ INSERT INTO Roles VALUES
 ;
 
 INSERT INTO Fabricantes VALUES
-    ('Oppo'),
-    ('Huawei'),
-    ('Samsung'),
-    ('Plasticos Herrera'),
-    ('Telar Calidad'),
-    ('Textiles SA'),
-    ('Fabricadora Martinez')
+    (1, 'Oppo'),
+    (2, 'Huawei'),
+    (3, 'Samsung'),
+    (4, 'Plasticos Herrera'),
+    (5, 'Telar Calidad'),
+    (6, 'Textiles SA'),
+    (7, 'Fabricadora Martinez')
 ;
 
 INSERT INTO Tipos VALUES

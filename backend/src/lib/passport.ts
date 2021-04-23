@@ -6,41 +6,33 @@ import * as helpers from "./helpers";
 
 const db = require("../database");
 passport.use(
-    "local.signup",
-    new localStrategy(
-      {
-        usernameField: "correo",
-        passwordField: "contrasena",
-        passReqToCallback: true,
-      },
-      async (req: Request & any, correo: string, contrasena: string, done: any) => {
-        const body = req.body;
-        console.log("passport: ");
-        const newUser: any = Object.assign({
-          correo,
-          contrasena,
-        }, req.body);
-        const rows = await db.query("SELECT * FROM Usuarios WHERE correo = ?", [
-          correo,
-        ]);
-        console.log("rows: ", rows);
-        if (rows.length === 0) {
-          newUser.contrasena = await helpers.encryptPassword(contrasena);
-          db.query("INSERT INTO Usuarios SET ? ", newUser, (err: any, res: any) => {
-            console.log("res add user: ", res);
-            if (err) {
-              console.error("Error al agregar usuario: ", err.code, err.sqlMessage);
-              done({error: err.code, message: err.sqlMessage}, null, null);
-              return;
-            } else {
-              newUser.id = res.insertId;
-              done(null, newUser, res);
-            }
-          });
-        } else {
-          done(null, undefined, {status: "failed", message: "Ya hay un usuario registrado con el correo" });
-        }
-        /* newUser.id = result.insertId;
+    "local.signup", new localStrategy({
+      usernameField: "correo",
+      passwordField: "contrasena",
+      passReqToCallback: true,
+    }, async (req: Request & any, correo: string, contrasena: string, done: any) => {
+      const body = req.body;
+      const newUser: any = Object.assign({
+        correo,
+        contrasena,
+      }, body);
+      const rows = await db.query("SELECT * FROM Usuarios WHERE correo = ?", correo );
+      if (rows.length === 0) {
+        newUser.contrasena = await helpers.encryptPassword(contrasena);
+        db.query("INSERT INTO Usuarios SET ? ", newUser, (err: any, res: any) => {
+          if (err) {
+            done({status: "FAILED", message: `${err.code} - ${err.message}`}, null);
+            return;
+          } else {
+            newUser.id = res.insertId;
+            done(null, newUser);
+          }
+        });
+      } else {
+        done({status: "failed", message: "Ya hay un usuario registrado con el correo" }, null);
+      }
+        /* ! Dejar bloque | alternativa al uso del callback
+        newUser.id = result.insertId;
         result.then((resultP: any) => {
           res.status(200).send({result: resultP});
         })
@@ -67,20 +59,19 @@ passport.use(
       if (rows.length > 0) {
         const user = rows[0];
         const validPassword = await helpers.matchPassword(
-          correo,
+          contrasena,
           user.contrasena
         );
         console.log("valid password: ", validPassword);
         if (validPassword) {
-          done(null, user, {status: "success", message: "Credenciales correctos " + user.correo});
+          done(null, user);
         } else {
-          done(null, user, { status: "failed", message: "Contrasena incorrecta"});
+          done({ status: "FAILED", message: "Contrasena incorrecta" }, null);
         }
       } else {
         return done(
+          { status: "FAILED", message: "No existe el correo" },
           null,
-          false,
-          { status: "failed", message: "No existe el correo" }
         );
       }
     }

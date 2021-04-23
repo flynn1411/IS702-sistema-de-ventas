@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs");
 const db = require("../database");
+const fs = require("fs");
+const readline = require("readline");
 import { Request, Response } from "express";
 
 export const encryptPassword = async (password: any) => {
@@ -69,5 +71,41 @@ export const editQuery = async (query: string, res: Response) => {
         console.log("Error while performing Query.");
         res.status(500).json({ message: err.message, error: err.code });
     }
+  });
+};
+
+export const readAndExecuteSql = (fileName: string, pool: any) => {
+  let ddl: string = "";
+  let dbStatus = true;
+  let actions: string[] = [];
+  const rl: any = readline.createInterface({
+      input: fs.createReadStream(`./public/scripts/${fileName}.sql`),
+      terminal: false
+  });
+  rl.on("line", function(chunk: any) {
+      ddl = ddl.concat(chunk.toString("ascii") + "\n");
+      if (ddl.includes(";")) {
+          actions = actions.concat(ddl);
+          ddl = "";
+      }
+    });
+  rl.on("close", function() {
+      console.log(`read ${fileName} sql finished`);
+      actions.forEach((sql: string) => {
+        console.log("sql: ", sql);
+        pool.query(sql, function(err: any, rows: any, fields: any) {
+            if (err) {
+                dbStatus = false;
+                console.log("Code", err.code, err.message);
+            }
+        });
+      });
+      console.log(dbStatus ? `sql ${fileName} SUCCESS` : `${fileName} FAILED`);
+      /* const result: Promise<any> = pool.query(ddl);
+      result.then((resultP: any) => {
+          console.log("Result: ", resultP);
+      })
+      .catch((err: any) => console.error("Error al ejecutar DDL: ", err)); */
+      // pool.end();
   });
 };

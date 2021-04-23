@@ -1,11 +1,18 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 const mysql = require("mysql");
 const { database } = require("./keys");
 const { promisify } = require("util"); // Convert callbacks to promises;
-const fs = require("fs");
-const readline = require("readline");
 const pool = mysql.createPool(database);
-pool.getConnection((err, connection) => {
+pool.getConnection((err, connection) => __awaiter(this, void 0, void 0, function* () {
     if (err) {
         if (err.code === "PROTOCOLO_CONNECTION_LOST") {
             console.error("DataBase connection was closed");
@@ -18,55 +25,13 @@ pool.getConnection((err, connection) => {
         }
     }
     if (connection) {
+        console.log(("successful connection to the %s DataBase"), database.database);
+        const result2 = yield pool.query("call sp_obtenerFabricante ");
+        console.log("result2", result2);
         connection.release();
     }
-    console.log(("  successful connection to the %s DataBase"), database.database);
     return;
-});
-const rl = readline.createInterface({
-    input: fs.createReadStream("./public/scripts/tables.sql"),
-    terminal: false
-});
-let ddl = "";
-let actions = [];
-rl.on("line", function (chunk) {
-    console.log("chuncl: ", chunk);
-    ddl = ddl.concat(chunk.toString("ascii") + "\n");
-    if (ddl.includes(";")) {
-        actions = actions.concat(ddl);
-        ddl = "";
-    }
-    /* pool.query(chunk.toString("ascii"), function(err: any, sets: any, fields: any) {
-        if (err) {
-            console.log(err);
-        }
-    }); */
-});
-rl.on("close", function () {
-    console.log("finished");
-    console.log("ddl: ", ddl);
-    console.log("actions: ", actions);
-    actions.forEach((sql) => {
-        pool.query(sql, function (err, rows, fields) {
-            if (!err) {
-                console.log("success");
-                console.log("rows: ", rows);
-                console.log("fields: ", fields);
-            }
-            else {
-                console.log("Error while performing Query.");
-                console.log("Code", err.code);
-                console.log("message", err.message);
-            }
-        });
-    });
-    /* const result: Promise<any> = pool.query(ddl);
-    result.then((resultP: any) => {
-        console.log("Result: ", resultP);
-    })
-    .catch((err: any) => console.error("Error al ejecutar DDL: ", err)); */
-    // pool.end();
-});
+}));
 // Promisify POOL query.
 pool.query = promisify(pool.query);
 module.exports = pool;

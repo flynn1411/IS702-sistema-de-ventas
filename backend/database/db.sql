@@ -107,7 +107,6 @@ CREATE TABLE IF NOT EXISTS Productos (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Productos';
 
-
 CREATE TABLE IF NOT EXISTS Ordenes_Compras(
     id INT PRIMARY KEY AUTO_INCREMENT,
     proveedor_id INT NOT NULL,
@@ -261,6 +260,8 @@ CREATE TABLE IF NOT EXISTS Facturas (
     FOREIGN KEY (envio_id) REFERENCES Envios(id)
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Facturas';
+
+
 
 CREATE TABLE Facturas_x_Producos (
     factura_id INT NOT NULL,

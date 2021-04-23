@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = require("bcryptjs");
 const db = require("../database");
+const fs = require("fs");
+const readline = require("readline");
 exports.encryptPassword = (password) => __awaiter(this, void 0, void 0, function* () {
     const salt = yield bcrypt.genSalt(10);
     const hash = yield bcrypt.hash(password, salt);
@@ -79,4 +81,39 @@ exports.editQuery = (query, res) => __awaiter(this, void 0, void 0, function* ()
         }
     });
 });
+exports.readAndExecuteSql = (fileName, pool) => {
+    let ddl = "";
+    let dbStatus = true;
+    let actions = [];
+    const rl = readline.createInterface({
+        input: fs.createReadStream(`./public/scripts/${fileName}.sql`),
+        terminal: false
+    });
+    rl.on("line", function (chunk) {
+        ddl = ddl.concat(chunk.toString("ascii") + "\n");
+        if (ddl.includes(";")) {
+            actions = actions.concat(ddl);
+            ddl = "";
+        }
+    });
+    rl.on("close", function () {
+        console.log(`read ${fileName} sql finished`);
+        actions.forEach((sql) => {
+            console.log("sql: ", sql);
+            pool.query(sql, function (err, rows, fields) {
+                if (err) {
+                    dbStatus = false;
+                    console.log("Code", err.code, err.message);
+                }
+            });
+        });
+        console.log(dbStatus ? `sql ${fileName} SUCCESS` : `${fileName} FAILED`);
+        /* const result: Promise<any> = pool.query(ddl);
+        result.then((resultP: any) => {
+            console.log("Result: ", resultP);
+        })
+        .catch((err: any) => console.error("Error al ejecutar DDL: ", err)); */
+        // pool.end();
+    });
+};
 //# sourceMappingURL=helpers.js.map

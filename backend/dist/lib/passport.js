@@ -25,34 +25,29 @@ passport.use("local.signup", new localStrategy({
     passReqToCallback: true,
 }, (req, correo, contrasena, done) => __awaiter(this, void 0, void 0, function* () {
     const body = req.body;
-    console.log("passport: ");
     const newUser = Object.assign({
         correo,
         contrasena,
-    }, req.body);
-    const rows = yield db.query("SELECT * FROM Usuarios WHERE correo = ?", [
-        correo,
-    ]);
-    console.log("rows: ", rows);
+    }, body);
+    const rows = yield db.query("SELECT * FROM Usuarios WHERE correo = ?", correo);
     if (rows.length === 0) {
         newUser.contrasena = yield helpers.encryptPassword(contrasena);
         db.query("INSERT INTO Usuarios SET ? ", newUser, (err, res) => {
-            console.log("res add user: ", res);
             if (err) {
-                console.error("Error al agregar usuario: ", err.code, err.sqlMessage);
-                done({ error: err.code, message: err.sqlMessage }, null, null);
+                done({ status: "FAILED", message: `${err.code} - ${err.message}` }, null);
                 return;
             }
             else {
                 newUser.id = res.insertId;
-                done(null, newUser, res);
+                done(null, newUser);
             }
         });
     }
     else {
-        done(null, undefined, { status: "failed", message: "Ya hay un usuario registrado con el correo" });
+        done({ status: "failed", message: "Ya hay un usuario registrado con el correo" }, null);
     }
-    /* newUser.id = result.insertId;
+    /* ! Dejar bloque | alternativa al uso del callback
+    newUser.id = result.insertId;
     result.then((resultP: any) => {
       res.status(200).send({result: resultP});
     })
@@ -71,17 +66,17 @@ passport.use("local.signin", new localStrategy({
     ]);
     if (rows.length > 0) {
         const user = rows[0];
-        const validPassword = yield helpers.matchPassword(correo, user.contrasena);
+        const validPassword = yield helpers.matchPassword(contrasena, user.contrasena);
         console.log("valid password: ", validPassword);
         if (validPassword) {
-            done(null, user, { status: "success", message: "Credenciales correctos " + user.correo });
+            done(null, user);
         }
         else {
-            done(null, user, { status: "failed", message: "Contrasena incorrecta" });
+            done({ status: "FAILED", message: "Contrasena incorrecta" }, null);
         }
     }
     else {
-        return done(null, false, { status: "failed", message: "No existe el correo" });
+        return done({ status: "FAILED", message: "No existe el correo" }, null);
     }
 })));
 //# sourceMappingURL=passport.js.map

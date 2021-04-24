@@ -14,6 +14,9 @@ import TiposRouter from "./tipos";
 const router = Router();
 
 router.use("/auth", AuthRouter);
+router.use("/test", (req, res) => {
+    res.end("TESTING SUCCESS");
+});
 router.use("/productos", ProductoRouter);
 router.use("/tipos", TiposRouter);
 router.use("/fabricantes", FabricantesRouter);

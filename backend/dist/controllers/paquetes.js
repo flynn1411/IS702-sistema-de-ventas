@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.eliminarPaquete = exports.obtenerPaquete = exports.editarPaquete = exports.agregarPaquete = void 0;
 const db = require("../db_connection");
-exports.agregarPaquete = (req, res) => {
+const agregarPaquete = (req, res) => {
     const product = req.body;
     const query = "";
     const result = db.query(query);
@@ -13,7 +14,8 @@ exports.agregarPaquete = (req, res) => {
     });
     console.log("result: ", result.then);
 };
-exports.editarPaquete = (req, res) => {
+exports.agregarPaquete = agregarPaquete;
+const editarPaquete = (req, res) => {
     const product = req.body;
     const id = Number(req.params);
     const query = "";
@@ -25,7 +27,8 @@ exports.editarPaquete = (req, res) => {
         res.status(500).json({ message: "Error al editar Paquete", error: err });
     });
 };
-exports.obtenerPaquete = (req, res) => {
+exports.editarPaquete = editarPaquete;
+const obtenerPaquete = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -36,7 +39,8 @@ exports.obtenerPaquete = (req, res) => {
         res.status(500).json({ message: "Error al obtener Paquete", error: err });
     });
 };
-exports.eliminarPaquete = (req, res) => {
+exports.obtenerPaquete = obtenerPaquete;
+const eliminarPaquete = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -50,4 +54,5 @@ exports.eliminarPaquete = (req, res) => {
     });
     console.log("result: ", result);
 };
+exports.eliminarPaquete = eliminarPaquete;
 //# sourceMappingURL=paquetes.js.map

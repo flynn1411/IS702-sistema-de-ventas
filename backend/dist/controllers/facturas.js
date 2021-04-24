@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.eliminarFactura = exports.obtenerFactura = exports.editarFactura = exports.agregarFactura = void 0;
 const db = require("../db_connection");
-exports.agregarFactura = (req, res) => {
+const agregarFactura = (req, res) => {
     const product = req.body;
     const query = "";
     const result = db.query(query);
@@ -13,7 +14,8 @@ exports.agregarFactura = (req, res) => {
     });
     console.log("result: ", result.then);
 };
-exports.editarFactura = (req, res) => {
+exports.agregarFactura = agregarFactura;
+const editarFactura = (req, res) => {
     const product = req.body;
     const id = Number(req.params);
     const query = "";
@@ -25,7 +27,8 @@ exports.editarFactura = (req, res) => {
         res.status(500).json({ message: "Error al editar factura", error: err });
     });
 };
-exports.obtenerFactura = (req, res) => {
+exports.editarFactura = editarFactura;
+const obtenerFactura = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -36,7 +39,8 @@ exports.obtenerFactura = (req, res) => {
         res.status(500).json({ message: "Error al obtener factura", error: err });
     });
 };
-exports.eliminarFactura = (req, res) => {
+exports.obtenerFactura = obtenerFactura;
+const eliminarFactura = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -50,4 +54,5 @@ exports.eliminarFactura = (req, res) => {
     });
     console.log("result: ", result);
 };
+exports.eliminarFactura = eliminarFactura;
 //# sourceMappingURL=facturas.js.map

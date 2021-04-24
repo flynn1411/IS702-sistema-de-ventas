@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.eliminarOrdenCompra = exports.obtenerOrdenCompra = exports.editarOrdenCompra = exports.agregarOrdenCompra = void 0;
 const db = require("../db_connection");
-exports.agregarOrdenCompra = (req, res) => {
+const agregarOrdenCompra = (req, res) => {
     const product = req.body;
     const query = "";
     const result = db.query(query);
@@ -13,7 +14,8 @@ exports.agregarOrdenCompra = (req, res) => {
     });
     console.log("result: ", result.then);
 };
-exports.editarOrdenCompra = (req, res) => {
+exports.agregarOrdenCompra = agregarOrdenCompra;
+const editarOrdenCompra = (req, res) => {
     const product = req.body;
     const id = Number(req.params);
     const query = "";
@@ -25,7 +27,8 @@ exports.editarOrdenCompra = (req, res) => {
         res.status(500).json({ message: "Error al editar OrdenCompra", error: err });
     });
 };
-exports.obtenerOrdenCompra = (req, res) => {
+exports.editarOrdenCompra = editarOrdenCompra;
+const obtenerOrdenCompra = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -36,7 +39,8 @@ exports.obtenerOrdenCompra = (req, res) => {
         res.status(500).json({ message: "Error al obtener OrdenCompra", error: err });
     });
 };
-exports.eliminarOrdenCompra = (req, res) => {
+exports.obtenerOrdenCompra = obtenerOrdenCompra;
+const eliminarOrdenCompra = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -50,4 +54,5 @@ exports.eliminarOrdenCompra = (req, res) => {
     });
     console.log("result: ", result);
 };
+exports.eliminarOrdenCompra = eliminarOrdenCompra;
 //# sourceMappingURL=ordenes-compra.js.map

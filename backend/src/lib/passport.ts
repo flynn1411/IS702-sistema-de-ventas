@@ -12,6 +12,9 @@ passport.use(
       passReqToCallback: true,
     }, async (req: Request & any, correo: string, contrasena: string, done: any) => {
       const body = req.body;
+      console.log("correo: "+ correo);
+      console.log("contrasenia: "+ contrasena);
+      console.log("body: "+ body);
       const newUser: any = Object.assign({
         correo,
         contrasena,

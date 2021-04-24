@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.eliminarInventario = exports.obtenerInventario = exports.editarInventario = exports.agregarInventario = void 0;
 const db = require("../db_connection");
-exports.agregarInventario = (req, res) => {
+const agregarInventario = (req, res) => {
     const product = req.body;
     const query = "";
     const result = db.query(query);
@@ -13,7 +14,8 @@ exports.agregarInventario = (req, res) => {
     });
     console.log("result: ", result.then);
 };
-exports.editarInventario = (req, res) => {
+exports.agregarInventario = agregarInventario;
+const editarInventario = (req, res) => {
     const product = req.body;
     const id = Number(req.params);
     const query = "";
@@ -25,7 +27,8 @@ exports.editarInventario = (req, res) => {
         res.status(500).json({ message: "Error al editar Inventario", error: err });
     });
 };
-exports.obtenerInventario = (req, res) => {
+exports.editarInventario = editarInventario;
+const obtenerInventario = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -36,7 +39,8 @@ exports.obtenerInventario = (req, res) => {
         res.status(500).json({ message: "Error al obtener Inventario", error: err });
     });
 };
-exports.eliminarInventario = (req, res) => {
+exports.obtenerInventario = obtenerInventario;
+const eliminarInventario = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -50,4 +54,5 @@ exports.eliminarInventario = (req, res) => {
     });
     console.log("result: ", result);
 };
+exports.eliminarInventario = eliminarInventario;
 //# sourceMappingURL=inventario.js.map

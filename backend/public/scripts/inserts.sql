@@ -339,3 +339,15 @@ INSERT INTO Inventario(sucursales_id,producto_id,existencia,descripcion,tipo_imp
     (1,1,400,"Comptadora macbook",1,0,17232.23),
     (2,3,1000,"Mac mini",1,0,32323.23)
 ;
+DELIMITER $$
+DROP PROCEDURE IF EXISTS sp_obtenerUser$$
+CREATE PROCEDURE sp_obtenerUser(
+    IN email VARCHAR(100)
+)
+BEGIN
+    SELECT id,primer_nombre, segundo_nombre, primer_apellido, segundo_apellido,
+        correo,num_telefono,direccion_id,rol, 
+        CAST(AES_DECRYPT(contrasena,@key) AS CHAR(100)) AS contrasena,
+        CAST(AES_DECRYPT(num_tarjeta,@key) AS CHAR(30)) AS num_tarjeta
+    FROM Usuarios WHERE correo = email;
+END$$

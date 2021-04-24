@@ -16,8 +16,8 @@ passport.use(
         correo,
         contrasena,
       }, body);
-      const rows = await db.query("SELECT * FROM Usuarios WHERE correo = ?", correo );
-      if (rows.length === 0) {
+      const rows = await db.query("call sp_obtenerUsuario(?)", correo );
+      if (rows[0].length === 0) {
         newUser.contrasena = await helpers.encryptPassword(contrasena);
         db.query("INSERT INTO Usuarios SET ? ", newUser, (err: any, res: any) => {
           if (err) {
@@ -53,9 +53,8 @@ passport.use(
       passReqToCallback: true,
     },
     async (req: Request & any, correo: string, contrasena: string, done: any) => {
-      const rows = await db.query("SELECT * FROM Usuarios WHERE correo = ?", [
-        correo,
-      ]);
+      const rows = await db.query(`call sp_obtenerUsuario(${correo})`);
+      console.log("user: ", rows);
       if (rows.length > 0) {
         const user = rows[0];
         const validPassword = await helpers.matchPassword(

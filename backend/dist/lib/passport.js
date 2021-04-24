@@ -29,8 +29,8 @@ passport.use("local.signup", new localStrategy({
         correo,
         contrasena,
     }, body);
-    const rows = yield db.query("SELECT * FROM Usuarios WHERE correo = ?", correo);
-    if (rows.length === 0) {
+    const rows = yield db.query("call sp_obtenerUsuario(?)", correo);
+    if (rows[0].length === 0) {
         newUser.contrasena = yield helpers.encryptPassword(contrasena);
         db.query("INSERT INTO Usuarios SET ? ", newUser, (err, res) => {
             if (err) {
@@ -61,9 +61,8 @@ passport.use("local.signin", new localStrategy({
     passwordField: "contrasena",
     passReqToCallback: true,
 }, (req, correo, contrasena, done) => __awaiter(this, void 0, void 0, function* () {
-    const rows = yield db.query("SELECT * FROM Usuarios WHERE correo = ?", [
-        correo,
-    ]);
+    const rows = yield db.query(`call sp_obtenerUsuario(${correo})`);
+    console.log("user: ", rows);
     if (rows.length > 0) {
         const user = rows[0];
         const validPassword = yield helpers.matchPassword(contrasena, user.contrasena);

@@ -307,12 +307,6 @@ INSERT INTO Roles(rol) VALUES
     ("vendedor")
 ;
 
-INSERT INTO Usuarios(primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,correo,contrasena,num_telefono,direccion_id,rol,num_tarjeta) VALUES
-    ("Admin","Admin","Admin","Admin","admin",AES_ENCRYPT("admin1234","admin"),"admin",15,1,AES_ENCRYPT("0000-0000","admin")),
-    ("Nelson","Jafet","Sambula","Palacios","nelson.sambula@unah.hn",AES_ENCRYPT("nelson1234","admin"),"9898-9080",2,2,AES_ENCRYPT("0000-0000","admin")),
-    ("Luis", "Gerardo", "Gutierrez", "Perdomo","lggutierrez@unah.hn",AES_ENCRYPT("luis1234","admin") , "98891920", 11, 3,"")
-;
-
 INSERT INTO Productos(fabricante_id,tipo_id,modelo,descripcion) VALUES 
     (1,1,"MacBook Pro","Computadora macbook"),
     (1,1,"MacBook Air","Computadora macbook"),

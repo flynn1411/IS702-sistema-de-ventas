@@ -48,17 +48,17 @@ CREATE TABLE Roles (
 
 CREATE TABLE Usuarios (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    primer_nombre VARCHAR(30)NOT NULL,
+    primer_nombre VARCHAR(30),
     segundo_nombre VARCHAR(30),
-    primer_apellido VARCHAR(30) NOT NULL,
+    primer_apellido VARCHAR(30),
     segundo_apellido VARCHAR(30),
     correo VARCHAR(50),
-    contrasena VARBINARY(100) NOT NULL,
+    contrasena VARBINARY(100),
     num_telefono VARCHAR(30),
     direccion_id INT,
     rol INT NOT NULL,
     num_tarjeta VARBINARY(30),
-    fecha_registro TIMESTAMP NOT NULL,
+    fecha_registro TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE KEY (correo),
     FOREIGN KEY (direccion_id) REFERENCES Direcciones(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
@@ -237,25 +237,15 @@ CREATE TABLE Facturas (
     usuario_id INT NOT NULL,
     direccion_id INT NOT NULL,
     config_factura_id INT NOT NULL,
-    num_factura VARCHAR(30) NOT NULL,
-    fecha TIMESTAMP NOT NULL,
+    num_factura VARCHAR(30),
+    fecha TIMESTAMP NOT NULL DEFAULT NOW(),
     exento DECIMAL(10,2),
     exonerado DECIMAL(10,2),
     total DECIMAL(10,2),
     pago_id INT,
     estado_pago BOOL NOT NULL,
     en_linea BOOL NOT NULL,
-    envio_id INT,
-    FOREIGN KEY (usuario_id) REFERENCES Usuarios (id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (direccion_id) REFERENCES Direcciones(id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (config_factura_id) REFERENCES Config_Facturas(id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (pago_id) REFERENCES Pagos(id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (envio_id) REFERENCES Envios(id)
-    ON DELETE CASCADE ON UPDATE CASCADE
+    envio_id INT
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Facturas';
 
 CREATE TABLE Facturas_x_Productos (

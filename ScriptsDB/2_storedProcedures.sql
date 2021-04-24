@@ -33,13 +33,21 @@ BEGIN
 END$$
 
 
--- obtener productos
+-- Obtener productos catalago
 DROP PROCEDURE IF EXISTS sp_obtenerProducto$$
 CREATE PROCEDURE sp_obtenerProducto()
 BEGIN
     SELECT * FROM Productos;
 END$$
 
+-- Producto disponible para vender
+DROP PROCEDURE IF EXISTS sp_obtenerProductoInventario$$
+CREATE PROCEDURE sp_obtenerProductoInventario()
+BEGIN
+    SELECT Productos.id as "id",Productos.modelo as "nombre",Inventario.existencia as "cantidad" FROM Inventario 
+    INNER JOIN Productos
+    ON Inventario.producto_id = Productos.id;
 
+END$$
 DELIMITER ;
 

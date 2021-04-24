@@ -312,3 +312,30 @@ INSERT INTO Usuarios(primer_nombre,segundo_nombre,primer_apellido,segundo_apelli
     ("Nelson","Jafet","Sambula","Palacios","nelson.sambula@unah.hn",AES_ENCRYPT("nelson1234","admin"),"9898-9080",2,2,AES_ENCRYPT("0000-0000","admin")),
     ("Luis", "Gerardo", "Gutierrez", "Perdomo","lggutierrez@unah.hn",AES_ENCRYPT("luis1234","admin") , "98891920", 11, 3,"")
 ;
+
+INSERT INTO Productos(fabricante_id,tipo_id,modelo,descripcion) VALUES 
+    (1,1,"MacBook Pro","Computadora macbook"),
+    (1,1,"MacBook Air","Computadora macbook"),
+    (1,1,"Mac Mini","Computadora macbook"),
+    (1,1,"iMac","Computadora macbook"),
+    (2,1,"Inspiron","Computadora Dell"),
+    (2,1,"XPS","Computadora Dell"),
+    (2,1,"Alienware","Computadora Dell"),
+    (2,1,"G","Computadora Dell"),
+    (12,2,"Cyber-shot DSC-RX100", "Camara Profesional"),
+    (12,2,"Lumix GM1", "Camara Profesional"),
+    (12,2,"XZ-2", "Camara Profesional"),
+    (12,2,"Fujifilm X10", "Camara Profesional"),
+    (10,4,"32LM630BPLA", "TV Profesional"),
+    (10,4, "X900", "TV Profesional"),
+    (10,4, "A90J XR Bravia Master", "TV Profesional"),
+    (11,4, "CX OLED", "TV Profesional"),
+    (11,4, "Serie 6 de 65 pulgadas", "TV Profesional"),
+    (10,3,"Galaxy 20","Smartphone"),
+    (11,3,"Droid mx","Smartphone")
+;
+
+INSERT INTO Inventario(sucursales_id,producto_id,existencia,descripcion,tipo_impuesto_id,impuesto,subtotal) VALUES
+    (1,1,400,"Comptadora macbook",1,0,17232.23),
+    (2,3,1000,"Mac mini",1,0,32323.23)
+;

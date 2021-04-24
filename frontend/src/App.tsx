@@ -13,7 +13,7 @@ export interface AppProps {
  
 function App(){
     function verificarUsuario():boolean {
-        if(localStorage.getItem("LOCAL_USER") != null){
+        if(localStorage.getItem("LOCAL_USER") !== null || localStorage.getItem("LOCAL_USER") === 'undefined'){
             return true;
         }else{
             return false;

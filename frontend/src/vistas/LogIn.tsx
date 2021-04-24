@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import LoginForm from '../interfaces/LoginForm';
-import { Link as LinkRoute, Redirect } from 'react-router-dom';
+import { Link as LinkRoute } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,10 +35,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function LogIn() {
-  const [userIsAuthed, setAuthedState] = useState(false);
   const classes = useStyles();
+  const [loginErr, setLoginErr] = useState<boolean>(false);
 
-  const url: string = 'http://localhost:3000/api/v1/auth/login';
+  function mostrarError(){
+    return(
+      <h3 style={{color: "red"}}>El usuario o contraseña son incorrectos.</h3>
+    );
+  }
+
+  //const url: string = 'http://localhost:3000/api/v1/auth/login';
+  const url: string = 'http://ec2-3-133-125-192.us-east-2.compute.amazonaws.com:3000/api/v1/auth/login';
 
   function verificarDatos(e: React.FocusEvent<HTMLFormElement>){
     e.preventDefault();
@@ -50,13 +57,13 @@ function LogIn() {
       headers: {'Content-Type': 'application/json','Accept': 'application/json'},
       body: JSON.stringify(datos)
     }).then(respuesta => respuesta.json()).then( resJSON =>{
-      if(resJSON.user !== false){
+      //console.log(resJSON);
+      if(!resJSON.err){
+        setLoginErr(false);
         localStorage.setItem("LOCAL_USER",JSON.stringify(resJSON.user));
 
-        setAuthedState(!userIsAuthed);
-
       }else{
-        console.log("El usuario no existe.");
+        setLoginErr(true);
       }
     });
   }
@@ -111,12 +118,14 @@ function LogIn() {
             <Grid item>         
               <LinkRoute to="/signup">{"¿No tienes una cuenta? Registrate aquí"}</LinkRoute>
             </Grid>
+            <Grid item>
+              {loginErr? mostrarError(): undefined}
+            </Grid>
           </Grid>
         </form>
       </div>
       <Box mt={8}>
       </Box>
-      {userIsAuthed ? <Redirect to="/"/> : undefined}
     </Container>
   );
 }

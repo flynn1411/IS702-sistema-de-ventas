@@ -1,0 +1,1 @@
+ssh ubuntu@54.167.101.64 -i frontend.pem

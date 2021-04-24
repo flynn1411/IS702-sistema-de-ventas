@@ -1,3 +1,4 @@
+// * Configuracion para conectarse a la BD.
 const config = {
     database: {
         host: "localhost",

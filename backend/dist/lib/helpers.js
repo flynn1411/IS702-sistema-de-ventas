@@ -1,23 +1,26 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.readAndExecuteSql = exports.editQuery = exports.removeQuery = exports.getQuery = exports.addQuery = exports.matchPassword = exports.encryptPassword = void 0;
 const bcrypt = require("bcryptjs");
 const db = require("../db_connection");
 const fs = require("fs");
 const readline = require("readline");
-exports.encryptPassword = (password) => __awaiter(this, void 0, void 0, function* () {
+const encryptPassword = (password) => __awaiter(void 0, void 0, void 0, function* () {
     const salt = yield bcrypt.genSalt(10);
     const hash = yield bcrypt.hash(password, salt);
     return hash;
 });
-exports.matchPassword = (password, savedPassword) => __awaiter(this, void 0, void 0, function* () {
+exports.encryptPassword = encryptPassword;
+const matchPassword = (password, savedPassword) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         return yield bcrypt.compare(password, savedPassword);
     }
@@ -25,7 +28,8 @@ exports.matchPassword = (password, savedPassword) => __awaiter(this, void 0, voi
         console.log(e);
     }
 });
-exports.addQuery = (query, res) => __awaiter(this, void 0, void 0, function* () {
+exports.matchPassword = matchPassword;
+const addQuery = (query, res) => __awaiter(void 0, void 0, void 0, function* () {
     db.query(query, function (err, rows, fields) {
         if (!err) {
             console.log("success");
@@ -39,7 +43,8 @@ exports.addQuery = (query, res) => __awaiter(this, void 0, void 0, function* () 
         }
     });
 });
-exports.getQuery = (query, res) => __awaiter(this, void 0, void 0, function* () {
+exports.addQuery = addQuery;
+const getQuery = (query, res) => __awaiter(void 0, void 0, void 0, function* () {
     db.query(query, function (err, rows, fields) {
         if (!err) {
             console.log("success");
@@ -53,7 +58,8 @@ exports.getQuery = (query, res) => __awaiter(this, void 0, void 0, function* () 
         }
     });
 });
-exports.removeQuery = (query, res) => __awaiter(this, void 0, void 0, function* () {
+exports.getQuery = getQuery;
+const removeQuery = (query, res) => __awaiter(void 0, void 0, void 0, function* () {
     db.query(query, function (err, rows, fields) {
         if (!err) {
             console.log("success");
@@ -67,7 +73,8 @@ exports.removeQuery = (query, res) => __awaiter(this, void 0, void 0, function* 
         }
     });
 });
-exports.editQuery = (query, res) => __awaiter(this, void 0, void 0, function* () {
+exports.removeQuery = removeQuery;
+const editQuery = (query, res) => __awaiter(void 0, void 0, void 0, function* () {
     db.query(query, function (err, rows, fields) {
         if (!err) {
             console.log("success");
@@ -81,7 +88,8 @@ exports.editQuery = (query, res) => __awaiter(this, void 0, void 0, function* ()
         }
     });
 });
-exports.readAndExecuteSql = (fileName, pool) => {
+exports.editQuery = editQuery;
+const readAndExecuteSql = (fileName, pool) => {
     let ddl = "";
     let dbStatus = true;
     let actions = [];
@@ -116,4 +124,5 @@ exports.readAndExecuteSql = (fileName, pool) => {
         // pool.end();
     });
 };
+exports.readAndExecuteSql = readAndExecuteSql;
 //# sourceMappingURL=helpers.js.map

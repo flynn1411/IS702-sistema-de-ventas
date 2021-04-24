@@ -4,7 +4,7 @@ const config = {
         host: "localhost",
         user: "root",
         // tslint:disable-next-line:object-literal-sort-keys
-        password: "LGerard10",
+        password: "password",
         database: "SistemaVentas"
     }
 };

@@ -17,6 +17,9 @@ const productos_1 = __importDefault(require("./productos"));
 const tipos_1 = __importDefault(require("./tipos"));
 const router = express_1.Router();
 router.use("/auth", auth_1.default);
+router.use("/test", (req, res) => {
+    res.end("TESTING SUCCESS");
+});
 router.use("/productos", productos_1.default);
 router.use("/tipos", tipos_1.default);
 router.use("/fabricantes", fabricantes_1.default);

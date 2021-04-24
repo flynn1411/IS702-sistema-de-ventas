@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 exports.registerUser = (req, res, next) => {
+    console.log("body: ", req.body);
     passport.authenticate("local.signup", (err, user) => {
         if (err !== null) {
             return res.status(200).json({ err });

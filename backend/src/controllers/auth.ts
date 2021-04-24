@@ -3,6 +3,7 @@ const passport =  require("passport");
 const jwt = require("jsonwebtoken");
 
 export const registerUser = (req: Request & any, res: Response, next: NextFunction) => {
+    console.log("body: ", req.body);
     passport.authenticate("local.signup", (err: any, user: any) => {
         if (err !== null) {
             return res.status(200).json({ err });

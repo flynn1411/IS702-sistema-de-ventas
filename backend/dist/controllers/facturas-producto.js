@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.eliminarFacturaProducto = exports.obtenerFacturaProducto = exports.editarFacturaProducto = exports.agregarFacturaProducto = void 0;
 const db = require("../db_connection");
-const agregarFacturaProducto = (req, res) => {
+exports.agregarFacturaProducto = (req, res) => {
     const product = req.body;
     const query = "";
     const result = db.query(query);
@@ -14,8 +13,7 @@ const agregarFacturaProducto = (req, res) => {
     });
     console.log("result: ", result.then);
 };
-exports.agregarFacturaProducto = agregarFacturaProducto;
-const editarFacturaProducto = (req, res) => {
+exports.editarFacturaProducto = (req, res) => {
     const product = req.body;
     const id = Number(req.params);
     const query = "";
@@ -27,8 +25,7 @@ const editarFacturaProducto = (req, res) => {
         res.status(500).json({ message: "Error al editar facturaProducto", error: err });
     });
 };
-exports.editarFacturaProducto = editarFacturaProducto;
-const obtenerFacturaProducto = (req, res) => {
+exports.obtenerFacturaProducto = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -39,8 +36,7 @@ const obtenerFacturaProducto = (req, res) => {
         res.status(500).json({ message: "Error al obtener facturaProducto", error: err });
     });
 };
-exports.obtenerFacturaProducto = obtenerFacturaProducto;
-const eliminarFacturaProducto = (req, res) => {
+exports.eliminarFacturaProducto = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -54,5 +50,4 @@ const eliminarFacturaProducto = (req, res) => {
     });
     console.log("result: ", result);
 };
-exports.eliminarFacturaProducto = eliminarFacturaProducto;
 //# sourceMappingURL=facturas-producto.js.map

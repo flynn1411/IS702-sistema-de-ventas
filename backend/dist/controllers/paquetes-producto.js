@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.eliminarPaqueteProducto = exports.obtenerPaqueteProducto = exports.editarPaqueteProducto = exports.agregarPaqueteProducto = void 0;
 const db = require("../db_connection");
-const agregarPaqueteProducto = (req, res) => {
+exports.agregarPaqueteProducto = (req, res) => {
     const product = req.body;
     const query = "";
     const result = db.query(query);
@@ -14,8 +13,7 @@ const agregarPaqueteProducto = (req, res) => {
     });
     console.log("result: ", result.then);
 };
-exports.agregarPaqueteProducto = agregarPaqueteProducto;
-const editarPaqueteProducto = (req, res) => {
+exports.editarPaqueteProducto = (req, res) => {
     const product = req.body;
     const id = Number(req.params);
     const query = "";
@@ -27,8 +25,7 @@ const editarPaqueteProducto = (req, res) => {
         res.status(500).json({ message: "Error al editar paquete de producto", error: err });
     });
 };
-exports.editarPaqueteProducto = editarPaqueteProducto;
-const obtenerPaqueteProducto = (req, res) => {
+exports.obtenerPaqueteProducto = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -39,8 +36,7 @@ const obtenerPaqueteProducto = (req, res) => {
         res.status(500).json({ message: "Error al obtener paquete de producto", error: err });
     });
 };
-exports.obtenerPaqueteProducto = obtenerPaqueteProducto;
-const eliminarPaqueteProducto = (req, res) => {
+exports.eliminarPaqueteProducto = (req, res) => {
     const id = req.params;
     const query = "";
     const result = db.query(query);
@@ -54,5 +50,4 @@ const eliminarPaqueteProducto = (req, res) => {
     });
     console.log("result: ", result);
 };
-exports.eliminarPaqueteProducto = eliminarPaqueteProducto;
 //# sourceMappingURL=paquetes-producto.js.map

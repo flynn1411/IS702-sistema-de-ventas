@@ -1,8 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerProductos = exports.agregarProducto = void 0;
 const db = require("../db_connection");
-const agregarProducto = (req, res) => {
+exports.agregarProducto = (req, res) => {
     const product = req.body;
     const query = "";
     const result = db.query(query, product);
@@ -13,8 +12,7 @@ const agregarProducto = (req, res) => {
         res.status(500).json({ message: "Error al crear producto", error: err });
     });
 };
-exports.agregarProducto = agregarProducto;
-const obtenerProductos = (req, res) => {
+exports.obtenerProductos = (req, res) => {
     console.log("obtener productos");
     const query = "call sp_obtenerProductoInventario";
     const result = db.query(query);
@@ -26,5 +24,4 @@ const obtenerProductos = (req, res) => {
     });
     console.log("result: ", result);
 };
-exports.obtenerProductos = obtenerProductos;
 //# sourceMappingURL=productos.js.map

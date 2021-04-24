@@ -17,9 +17,9 @@ app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
-/* app.use("/", (req, res) => {
+app.use("/", (req, res) => {
     res.send("ROOT PATH CONNECTED");
-}); */
+});
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use("/api/v1", index_1.default);

@@ -7,27 +7,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 const mysql = require("mysql");
 const { database } = require("./keys");
 const { promisify } = require("util"); // Convert callbacks to promises;
 const pool = mysql.createPool(database);
 pool.getConnection((err, connection) => __awaiter(this, void 0, void 0, function* () {
-    if (err) {
+    if (err !== null) {
+        console.error("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        console.error("           DATABASE CONNECTION ERROR");
+        console.error("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         if (err.code === "PROTOCOLO_CONNECTION_LOST") {
             console.error("DataBase connection was closed");
         }
-        if (err.code === "ER_CON_COUNT_ERROR") {
+        else if (err.code === "ER_CON_COUNT_ERROR") {
             console.error("DataBase has many connections");
         }
-        if (err.code === "ECONNREFUSED") {
+        else if (err.code === "ECONNREFUSED") {
             console.error("DataBase connection was refused");
+        }
+        else if (err.code === "ER_BAD_DB_ERROR") {
+            console.error(err.sqlMessage);
+        }
+        else {
+            console.error("Undefined error: ", err.code, err.sqlMessage);
         }
     }
     if (connection) {
         console.log(("successful connection to the %s DataBase"), database.database);
-        const result2 = yield pool.query("call sp_obtenerFabricante ");
-        console.log("result2", result2);
         connection.release();
     }
     return;

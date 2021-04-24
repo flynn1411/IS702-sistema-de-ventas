@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-const db = require("../database");
+const db = require("../db_connection");
 
 export const obtenerTipos = (req: Request & any, res: Response) => {
-    console.log("obteniendo fabricantes: ");
+    console.log("obteniendo Tipos: ");
     const query = "call sp_obtenerTipo";
     const result: Promise<any> = db.query(query);
     result.then((resultP: any[]) => {

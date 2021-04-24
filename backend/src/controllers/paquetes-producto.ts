@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-const db = require("../database");
+const db = require("../db_connection");
 
 export const agregarPaqueteProducto = (req: Request & any, res: Response) => {
     const product = req.body;

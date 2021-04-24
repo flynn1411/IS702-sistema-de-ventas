@@ -1,13 +1,14 @@
-CREATE TABLE IF NOT EXISTS Testing (
-    id INT PRIMARY KEY AUTO_INCREMENT
-)ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de testing';
+-- Creando Base de datos si no existe
+DROP DATABASE IF EXISTS SistemaVentas;
+CREATE DATABASE SistemaVentas CHARACTER SET utf8;
+USE SistemaVentas;
 
-CREATE TABLE IF NOT EXISTS Regiones (
+CREATE TABLE Regiones (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL
 )ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Regiones';
 
-CREATE TABLE IF NOT EXISTS Paises (
+CREATE TABLE Paises (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
     region_id INT NOT NULL,
@@ -15,7 +16,7 @@ CREATE TABLE IF NOT EXISTS Paises (
     ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 COMMENT='Tabla de Paises';
 
-CREATE TABLE IF NOT EXISTS Ciudades (
+CREATE TABLE Ciudades (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
     pais_id INT NOT NULL,
@@ -26,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Ciudades (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Ciudades';
 
-CREATE TABLE IF NOT EXISTS Direcciones (
+CREATE TABLE Direcciones (
     id INT PRIMARY KEY AUTO_INCREMENT,
     calle VARCHAR(100) NOT NULL,
     region_id INT NOT NULL,
@@ -40,23 +41,24 @@ CREATE TABLE IF NOT EXISTS Direcciones (
     ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Direcciones';
 
-CREATE TABLE IF NOT EXISTS Roles (
+CREATE TABLE Roles (
     id INT PRIMARY KEY AUTO_INCREMENT,
     rol VARCHAR(20) NOT NULL
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Roles';
 
-CREATE TABLE IF NOT EXISTS Usuarios (
+CREATE TABLE Usuarios (
     id INT PRIMARY KEY AUTO_INCREMENT,
     primer_nombre VARCHAR(30)NOT NULL,
     segundo_nombre VARCHAR(30),
     primer_apellido VARCHAR(30) NOT NULL,
     segundo_apellido VARCHAR(30),
     correo VARCHAR(50),
-    contrasena VARCHAR(100) NOT NULL,
+    contrasena VARBINARY(100) NOT NULL,
     num_telefono VARCHAR(30),
     direccion_id INT,
     rol INT NOT NULL,
-    num_tarjeta VARCHAR(20),
+    num_tarjeta VARBINARY(30),
+    fecha_registro TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE KEY (correo),
     FOREIGN KEY (direccion_id) REFERENCES Direcciones(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
@@ -64,27 +66,28 @@ CREATE TABLE IF NOT EXISTS Usuarios (
     ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB AUTO_INCREMENT=1 COMMENT='Tabla de Usuarios';
 
-CREATE TABLE IF NOT EXISTS Fabricantes (
+CREATE TABLE Fabricantes (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Fabricantes';
 
-CREATE TABLE IF NOT EXISTS Tipos (
+CREATE TABLE Tipos (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL
 )ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Tipos';
 
-CREATE TABLE IF NOT EXISTS Proveedores (
+CREATE TABLE Proveedores (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
     correo VARCHAR(50) NOT NULL,
     num_telefono VARCHAR(30),
     direccion_id INT NOT NULL,
+    UNIQUE (correo),
     FOREIGN KEY (direccion_id) REFERENCES Direcciones(id)
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Proveedores';
 
-CREATE TABLE IF NOT EXISTS Productos (
+CREATE TABLE Productos (
     id INT PRIMARY KEY AUTO_INCREMENT,
     fabricante_id INT NOT NULL,
     tipo_id INT NOT NULL,
@@ -97,7 +100,7 @@ CREATE TABLE IF NOT EXISTS Productos (
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Productos';
 
 
-CREATE TABLE IF NOT EXISTS Ordenes_Compras(
+CREATE TABLE Ordenes_Compras(
     id INT PRIMARY KEY AUTO_INCREMENT,
     proveedor_id INT NOT NULL,
     producto_id INT NOT NULL,
@@ -111,7 +114,7 @@ CREATE TABLE IF NOT EXISTS Ordenes_Compras(
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Ordenes de Compras';
 
-CREATE TABLE IF NOT EXISTS Sucursales (
+CREATE TABLE Sucursales (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(30) NOT NULL,
     region_id INT NOT NULL,
@@ -130,30 +133,34 @@ CREATE TABLE IF NOT EXISTS Sucursales (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Sucursales';
 
-CREATE TABLE IF NOT EXISTS Tipos_Mov (
+CREATE TABLE Tipos_Mov (
     id INT PRIMARY KEY AUTO_INCREMENT,
     codigo VARCHAR(50) NOT NULL,
     nombre VARCHAR(50) NOT NULL,
     movimiento SMALLINT NOT NULL
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Tipos de Movimientos';
 
-CREATE TABLE IF NOT EXISTS Mov_Inventario (
+CREATE TABLE Mov_Inventario (
     id INT PRIMARY KEY AUTO_INCREMENT,
     producto_id INT NOT NULL,
     movimiento_id INT NOT NULL,
     cantidad INT NOT NULL,
     precio DECIMAL(10,2),
-    fecha_mov TIMESTAMP NOT NULL
+    fecha_mov TIMESTAMP NOT NULL,
+    FOREIGN KEY (movimiento_id) REFERENCES Tipos_Mov(id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES Productos(id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Movimientos de Invntarios';
 
-CREATE TABLE IF NOT EXISTS Tipo_Impuestos (
+CREATE TABLE Tipo_Impuestos (
     id INT PRIMARY KEY AUTO_INCREMENT,
     porcentaje DECIMAL(10,2),
     activo BOOL NOT NULL,
     requerido BOOL NOT NULL
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Tipos de Tipo_Impuestos';
 
-CREATE TABLE IF NOT EXISTS Inventario (
+CREATE TABLE Inventario (
     id INT PRIMARY KEY AUTO_INCREMENT,
     sucursales_id INT NOT NULL,
     producto_id INT NOT NULL,
@@ -170,14 +177,14 @@ CREATE TABLE IF NOT EXISTS Inventario (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Inventarios';
 
-CREATE TABLE IF NOT EXISTS Paquetes (
+CREATE TABLE Paquetes (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre_paquete VARCHAR(100) NOT NULL,
     descripcion TEXT NOT NULL,
     fecha_paquete DATE NOT NULL
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Paquetes';
 
-CREATE TABLE IF NOT EXISTS Productos_Paquetes (
+CREATE TABLE Productos_Paquetes (
     id INT PRIMARY KEY AUTO_INCREMENT,
     producto_id INT,
     paquetes_id INT,
@@ -187,20 +194,20 @@ CREATE TABLE IF NOT EXISTS Productos_Paquetes (
     ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Paquetes de Productos';
 
-CREATE TABLE IF NOT EXISTS Tipos_Docmentos (
+CREATE TABLE Tipos_Docmentos (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
     descripcion TEXT
 )ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Tipo de Documentos';
 
-CREATE TABLE IF NOT EXISTS Envios (
+CREATE TABLE Envios (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre_empresas VARCHAR(50) NOT NULL,
     num_telefono VARCHAR(30) NOT NULL,
     correo VARCHAR(50)
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Envios';
 
-CREATE TABLE IF NOT EXISTS Config_Facturas (
+CREATE TABLE Config_Facturas (
     id INT PRIMARY KEY AUTO_INCREMENT,
     tipo_documento_id INT NOT NULL,
     sucursal_id INT NOT NULL,
@@ -218,14 +225,14 @@ CREATE TABLE IF NOT EXISTS Config_Facturas (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Configuracion de Facturas';
 
-CREATE TABLE IF NOT EXISTS Pagos (
+CREATE TABLE Pagos (
     id INT PRIMARY KEY AUTO_INCREMENT,
     metodo_pago ENUM("efectivo","tarjeta","cuenta") DEFAULT "efectivo",
     efectivo_recibido DECIMAL(10,2) NOT NULL,
     vuelto_entregado DECIMAL(10,2) NOT NULL
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Pagos';
 
-CREATE TABLE IF NOT EXISTS Facturas (
+CREATE TABLE Facturas (
     id INT PRIMARY KEY AUTO_INCREMENT,
     usuario_id INT NOT NULL,
     direccion_id INT NOT NULL,
@@ -251,7 +258,7 @@ CREATE TABLE IF NOT EXISTS Facturas (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Facturas';
 
-CREATE TABLE IF NOT EXISTS Facturas_x_Producos (
+CREATE TABLE Facturas_x_Productos (
     factura_id INT NOT NULL,
     producto_id INT NOT NULL,
     FOREIGN KEY (factura_id) REFERENCES Facturas(id)
@@ -259,3 +266,4 @@ CREATE TABLE IF NOT EXISTS Facturas_x_Producos (
     FOREIGN KEY (producto_id) REFERENCES Productos(id)
     ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Facturas y Productos';
+

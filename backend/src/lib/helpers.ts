@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const db = require("../database");
+const db = require("../db_connection");
 const fs = require("fs");
 const readline = require("readline");
 import { Request, Response } from "express";

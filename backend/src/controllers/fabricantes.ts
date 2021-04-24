@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-const db = require("../database");
+const db = require("../db_connection");
 
 export const obtenerFabricantes = (req: Request & any, res: Response) => {
     console.log("obteniendo fabricantes: ");
@@ -9,6 +9,6 @@ export const obtenerFabricantes = (req: Request & any, res: Response) => {
         res.status(200).send(resultP);
     })
     .catch((err: any) => {
-        res.status(500).json({ message: "Error al obtener Tipo", error: err });
+        res.status(500).json({ message: "Error al obtener Fabricantes", error: err });
     });
 };

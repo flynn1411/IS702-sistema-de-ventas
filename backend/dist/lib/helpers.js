@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = require("bcryptjs");
-const db = require("../database");
+const db = require("../db_connection");
 const fs = require("fs");
 const readline = require("readline");
 exports.encryptPassword = (password) => __awaiter(this, void 0, void 0, function* () {

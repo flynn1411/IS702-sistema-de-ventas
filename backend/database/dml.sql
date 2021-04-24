@@ -1,3 +1,15 @@
+DELIMITER 
+
+DROP PROCEDURE IF EXISTS sp_obtenerProductoInventario$$
+CREATE PROCEDURE sp_obtenerProductoInventario()
+BEGIN
+    SELECT Productos.id as "id",Productos.modelo as "nombre",Inventario.existencia as "cantidad" FROM Inventario 
+    INNER JOIN Productos
+    ON Inventario.producto_id = Productos.id;
+
+END$$
+DELIMITER ;
+
 INSERT INTO Regiones VALUES
     (1, 'Occidente'),
     (2, 'Sur'),

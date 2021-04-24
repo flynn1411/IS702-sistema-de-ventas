@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const db = require("../database");
+const db = require("../db_connection");
 exports.agregarPaqueteProducto = (req, res) => {
     const product = req.body;
     const query = "";

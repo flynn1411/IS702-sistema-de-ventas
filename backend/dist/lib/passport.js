@@ -18,7 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport = require("passport");
 const localStrategy = require("passport-local").Strategy;
 const helpers = __importStar(require("./helpers"));
-const db = require("../database");
+const db = require("../db_connection");
 passport.use("local.signup", new localStrategy({
     usernameField: "correo",
     passwordField: "contrasena",

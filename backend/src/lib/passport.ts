@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 const localStrategy = require("passport-local").Strategy;
 import * as helpers from "./helpers";
 
-const db = require("../database");
+const db = require("../db_connection");
 passport.use(
     "local.signup", new localStrategy({
       usernameField: "correo",

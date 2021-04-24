@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const db = require("../database");
+const db = require("../db_connection");
 exports.obtenerTipos = (req, res) => {
-    console.log("obteniendo fabricantes: ");
+    console.log("obteniendo Tipos: ");
     const query = "call sp_obtenerTipo";
     const result = db.query(query);
     result.then((resultP) => {

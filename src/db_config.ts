@@ -1,7 +1,7 @@
 // * Configuracion para conectarse a la BD.
 const config = {
     database: {
-        host: "database-1.cyppranvxdzq.us-east-2.rds.amazonaws.com",
+        host: "database-1.cjjjph5q4chk.us-east-1.rds.amazonaws.com",
         user: "admin",
         // tslint:disable-next-line:object-literal-sort-keys
         password: "admin123",

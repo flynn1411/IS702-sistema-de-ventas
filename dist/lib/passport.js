@@ -61,10 +61,12 @@ passport.use("local.signin", new localStrategy({
     passwordField: "contrasena",
     passReqToCallback: true,
 }, (req, correo, contrasena, done) => __awaiter(this, void 0, void 0, function* () {
-    const rows = yield db.query(`call sp_obtenerUsuario(${correo})`);
-    console.log("user: ", rows);
+    const rows = yield db.query(`call sp_obtenerUsuario( ? )`, correo);
     if (rows.length > 0) {
-        const user = rows[0];
+        const user = rows[0][0];
+        console.log("user: ", user);
+        console.log("pass1: ", user.contrasena);
+        console.log("pass2: ", contrasena);
         const validPassword = yield helpers.matchPassword(contrasena, user.contrasena);
         console.log("valid password: ", validPassword);
         if (validPassword) {

@@ -53,10 +53,12 @@ passport.use(
       passReqToCallback: true,
     },
     async (req: Request & any, correo: string, contrasena: string, done: any) => {
-      const rows = await db.query(`call sp_obtenerUsuario(${correo})`);
-      console.log("user: ", rows);
+      const rows = await db.query(`call sp_obtenerUsuario( ? )`, correo);
       if (rows.length > 0) {
-        const user = rows[0];
+        const user = rows[0][0];
+        console.log("user: ", user);
+        console.log("pass1: ", user.contrasena);
+        console.log("pass2: ", contrasena);
         const validPassword = await helpers.matchPassword(
           contrasena,
           user.contrasena

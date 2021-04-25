@@ -39,7 +39,7 @@ export const obtenerOrdenesCompra = (req: Request & any, res: Response) => {
 };
 
 export const cambiarEstadoOrdenCompra = (req: Request & any, res: Response) => {
-    const id = req.params.id;
+    const id = req.body.id;
     console.log("change status id: ", id);
     const result: Promise<any> = db.query(`call sp_cambiarEstadoCompra(${id})`);
     result.then((resultP: any) => {

@@ -44,7 +44,7 @@ exports.obtenerOrdenesCompra = (req, res) => {
     });
 };
 exports.cambiarEstadoOrdenCompra = (req, res) => {
-    const id = req.params.id;
+    const id = req.body.id;
     console.log("change status id: ", id);
     const result = db.query(`call sp_cambiarEstadoCompra(${id})`);
     result.then((resultP) => {

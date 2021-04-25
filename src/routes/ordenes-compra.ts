@@ -9,8 +9,8 @@ import {
 const OrdenCompraRouter = Router();
 
 OrdenCompraRouter.post("/create", agregarOrdenCompra);
+OrdenCompraRouter.put("/change-status", cambiarEstadoOrdenCompra);
 OrdenCompraRouter.get("/orden-compra/:id", obtenerOrdenCompra);
 OrdenCompraRouter.get("/list", obtenerOrdenesCompra);
-OrdenCompraRouter.post("/change-status/:id", cambiarEstadoOrdenCompra);
 
 export default OrdenCompraRouter;

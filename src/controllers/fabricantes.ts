@@ -6,7 +6,7 @@ export const obtenerFabricantes = (req: Request & any, res: Response) => {
     const query = "call sp_obtenerFabricante";
     const result: Promise<any> = db.query(query);
     result.then((resultP: any[]) => {
-        res.status(200).send(resultP);
+        res.status(200).send(resultP[0]);
     })
     .catch((err: any) => {
         res.status(500).json({ message: "Error al obtener Fabricantes", error: err });

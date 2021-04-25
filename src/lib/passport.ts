@@ -58,9 +58,9 @@ passport.use(
       console.log("rows: ", rows);
       if (rows[0].length > 0) {
         const user = rows[0][0];
-        console.log("user: ", user);
-        console.log("pass1: ", user.contrasena);
-        console.log("pass2: ", contrasena);
+        // console.log("user: ", user);
+        // console.log("pass1: ", user.contrasena);
+        // console.log("pass2: ", contrasena);
         const validPassword = await helpers.matchPassword(
           contrasena,
           user.contrasena

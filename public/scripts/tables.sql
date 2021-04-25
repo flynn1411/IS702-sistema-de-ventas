@@ -48,12 +48,12 @@ CREATE TABLE Roles (
 
 CREATE TABLE Usuarios (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    primer_nombre VARCHAR(30)NOT NULL,
+    primer_nombre VARCHAR(30),
     segundo_nombre VARCHAR(30),
-    primer_apellido VARCHAR(30) NOT NULL,
+    primer_apellido VARCHAR(30),
     segundo_apellido VARCHAR(30),
     correo VARCHAR(50),
-    contrasena VARBINARY(100) NOT NULL,
+    contrasena VARBINARY(100),
     num_telefono VARCHAR(30),
     direccion_id INT,
     rol INT NOT NULL,
@@ -107,7 +107,7 @@ CREATE TABLE Ordenes_Compras(
     cantidad INT NOT NULL,
     precio_compra INT NOT NULL,
     fecha_orden TIMESTAMP NOT NULL,
-    estado BOOL NOT NULL,
+    estado BOOL NOT NULL DEFAULT FALSE,
     FOREIGN KEY (proveedor_id) REFERENCES Proveedores(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (producto_id) REFERENCES Productos(id)
@@ -202,7 +202,7 @@ CREATE TABLE Tipos_Docmentos (
 
 CREATE TABLE Envios (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_empresas VARCHAR(50) NOT NULL,
+    nombre_empresa VARCHAR(50) NOT NULL,
     num_telefono VARCHAR(30) NOT NULL,
     correo VARCHAR(50)
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Envios';
@@ -228,8 +228,8 @@ CREATE TABLE Config_Facturas (
 CREATE TABLE Pagos (
     id INT PRIMARY KEY AUTO_INCREMENT,
     metodo_pago ENUM("efectivo","tarjeta","cuenta") DEFAULT "efectivo",
-    efectivo_recibido DECIMAL(10,2) NOT NULL,
-    vuelto_entregado DECIMAL(10,2) NOT NULL
+    efectivo_recibido DECIMAL(10,2),
+    vuelto_entregado DECIMAL(10,2)
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Pagos';
 
 CREATE TABLE Facturas (
@@ -237,33 +237,23 @@ CREATE TABLE Facturas (
     usuario_id INT NOT NULL,
     direccion_id INT NOT NULL,
     config_factura_id INT NOT NULL,
-    num_factura VARCHAR(30) NOT NULL,
-    fecha TIMESTAMP NOT NULL,
+    num_factura VARCHAR(30),
+    fecha TIMESTAMP NOT NULL DEFAULT NOW(),
     exento DECIMAL(10,2),
     exonerado DECIMAL(10,2),
     total DECIMAL(10,2),
     pago_id INT,
-    estado_pago BOOL NOT NULL,
+    estado_pago BOOL NOT NULL DEFAULT FALSE,
     en_linea BOOL NOT NULL,
-    envio_id INT,
-    FOREIGN KEY (usuario_id) REFERENCES Usuarios (id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (direccion_id) REFERENCES Direcciones(id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (config_factura_id) REFERENCES Config_Facturas(id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (pago_id) REFERENCES Pagos(id)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (envio_id) REFERENCES Envios(id)
-    ON DELETE CASCADE ON UPDATE CASCADE
+    envio_id INT
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Facturas';
 
 CREATE TABLE Facturas_x_Productos (
     factura_id INT NOT NULL,
     producto_id INT NOT NULL,
+    cantidad INT,
     FOREIGN KEY (factura_id) REFERENCES Facturas(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (producto_id) REFERENCES Productos(id)
     ON DELETE CASCADE ON UPDATE CASCADE
 )ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Facturas y Productos';
-

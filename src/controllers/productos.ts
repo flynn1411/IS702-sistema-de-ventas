@@ -46,17 +46,18 @@ export const obtenerProductos = (req: Request & any, res: Response) => {
     .catch((err: any) => {
         res.status(500).json({ message: "Error al obtener productos", error: err });
     });
-    console.log("result: ", result);
 };
 export const obtenerProductosPorCategoria = (req: Request & any, res: Response) => {
-    console.log("obtener productos");
-    const id = req.params;
+    console.log("obtener productos por categoria");
+    const id = req.params.id;
     const query = `
         SELECT
             Productos.id as "id",
             Productos.modelo as "nombre",
+            Productos.tipo_id,
             Tipos.nombre as "categoria",
             Fabricantes.nombre as "fabricante",
+            Productos.fabricante_id,
             Inventario.existencia as "existencia",
             Inventario.subtotal as "precio"
         FROM
@@ -82,12 +83,11 @@ export const obtenerProductosPorCategoria = (req: Request & any, res: Response) 
     .catch((err: any) => {
         res.status(500).json({ message: "Error al obtener productos por categoria", error: err });
     });
-    console.log("result: ", result);
 };
 
 export const obtenerProductosPorFabricante = (req: Request & any, res: Response) => {
-    console.log("obtener productos");
-    const id = req.params;
+    console.log("obtener productos por fabricante");
+    const id = req.params.id;
     const query = `
         SELECT
             Productos.id as "id",
@@ -121,18 +121,43 @@ export const obtenerProductosPorFabricante = (req: Request & any, res: Response)
     .catch((err: any) => {
         res.status(500).json({ message: "Error al obtener productos por fabricante", error: err });
     });
-    console.log("result: ", result);
 };
 
 export const obtenerProducto = (req: Request & any, res: Response) => {
     console.log("obtener producto");
-    const query = "SELECT * FROM Productos WHERE id = ?";
+    const id = req.params.id;
+    const query = `
+        SELECT
+            Productos.id as "id",
+            Productos.modelo as "nombre",
+            Productos.tipo_id,
+            Tipos.nombre as "categoria",
+            Fabricantes.nombre as "fabricante",
+            Productos.fabricante_id,
+            Inventario.existencia as "existencia",
+            Inventario.subtotal as "precio",
+            Productos.descripcion
+        FROM
+            Inventario
+        INNER JOIN
+            Productos
+        ON
+            Inventario.producto_id = Productos.id
+        INNER JOIN
+            Tipos
+        ON
+            Tipos.id = Productos.tipo_id
+        INNER JOIN
+            Fabricantes
+        ON
+            Fabricantes.id = Productos.fabricante_id
+        WHERE Productos.id = ${id}
+    ;`;
     const result = db.query(query);
     result.then((resultP: any) => {
         res.status(200).send(resultP);
     })
     .catch((err: any) => {
-        res.status(500).json({ message: "Error al obtener productos", error: err });
+        res.status(500).json({ message: "Error al obtener producto", error: err });
     });
-    console.log("result: ", result);
 };

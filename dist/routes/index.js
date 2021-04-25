@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const auth_1 = __importDefault(require("./auth"));
+const direccion_1 = __importDefault(require("./direccion"));
 const fabricantes_1 = __importDefault(require("./fabricantes"));
 const facturas_1 = __importDefault(require("./facturas"));
 const facturas_producto_1 = __importDefault(require("./facturas-producto"));
@@ -25,6 +26,7 @@ router.use("/tipos", tipos_1.default);
 router.use("/fabricantes", fabricantes_1.default);
 router.use("/ordenes-compra", ordenes_compra_1.default);
 router.use("/inventario", inventario_1.default);
+router.use("/direccion", direccion_1.default);
 router.use("/paquetes", paquetes_1.default);
 router.use("/paquetes-producto", paquetes_producto_1.default);
 router.use("/pagos", pagos_1.default);

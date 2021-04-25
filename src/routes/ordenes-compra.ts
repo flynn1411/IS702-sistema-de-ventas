@@ -1,16 +1,16 @@
 import { Router } from "express";
 import {
     agregarOrdenCompra,
-    editarOrdenCompra,
-    eliminarOrdenCompra,
-    obtenerOrdenCompra
+    cambiarEstadoOrdenCompra,
+    obtenerOrdenCompra,
+    obtenerOrdenesCompra,
 } from "./../controllers/ordenes-compra";
 
 const OrdenCompraRouter = Router();
 
-OrdenCompraRouter.post("/agregar-factura-producto", agregarOrdenCompra);
-OrdenCompraRouter.put("/update/:id", editarOrdenCompra);
-OrdenCompraRouter.get("/get/:id", obtenerOrdenCompra);
-OrdenCompraRouter.delete("/delete/:id", eliminarOrdenCompra);
+OrdenCompraRouter.post("/create", agregarOrdenCompra);
+OrdenCompraRouter.get("/orden-compra/:id", obtenerOrdenCompra);
+OrdenCompraRouter.get("/list", obtenerOrdenesCompra);
+OrdenCompraRouter.post("/change-status/:id", cambiarEstadoOrdenCompra);
 
 export default OrdenCompraRouter;

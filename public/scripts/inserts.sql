@@ -307,12 +307,6 @@ INSERT INTO Roles(rol) VALUES
     ("vendedor")
 ;
 
-INSERT INTO Usuarios(primer_nombre,segundo_nombre,primer_apellido,segundo_apellido,correo,contrasena,num_telefono,direccion_id,rol,num_tarjeta) VALUES
-    ("Admin","Admin","Admin","Admin","admin",AES_ENCRYPT("admin1234","admin"),"admin",15,1,AES_ENCRYPT("0000-0000","admin")),
-    ("Nelson","Jafet","Sambula","Palacios","nelson.sambula@unah.hn",AES_ENCRYPT("nelson1234","admin"),"9898-9080",2,2,AES_ENCRYPT("0000-0000","admin")),
-    ("Luis", "Gerardo", "Gutierrez", "Perdomo","lggutierrez@unah.hn",AES_ENCRYPT("luis1234","admin") , "98891920", 11, 3,"")
-;
-
 INSERT INTO Productos(fabricante_id,tipo_id,modelo,descripcion) VALUES 
     (1,1,"MacBook Pro","Computadora macbook"),
     (1,1,"MacBook Air","Computadora macbook"),
@@ -336,23 +330,10 @@ INSERT INTO Productos(fabricante_id,tipo_id,modelo,descripcion) VALUES
 ;
 
 INSERT INTO Inventario(sucursales_id,producto_id,existencia,descripcion,tipo_impuesto_id,impuesto,subtotal) VALUES
-    (4,4,1000,"Inventario nuevo",1,0,32323.23),
-    (1,5,500,"Inventario nuevo",1,0,175.23),
-    (2,6,6000,"Inventario nuevo",1,0,443.23),
-    (3,7,100,"Inventario nuevo",1,0,266.23),
-    (4,8,1300,"Inventario nuevo",1,0,4323.23),
-    (4,9,1100,"Inventario nuevo",1,0,134),
-    (4,10,420,"Inventario nuevo",1,0,1200)
+    (1,1,400,"Comptadora macbook",1,0,17232.23),
+    (2,3,1000,"Mac mini",1,0,32323.23)
 ;
-DELIMITER $$
-DROP PROCEDURE IF EXISTS sp_obtenerUser$$
-CREATE PROCEDURE sp_obtenerUser(
-    IN email VARCHAR(100)
-)
-BEGIN
-    SELECT id,primer_nombre, segundo_nombre, primer_apellido, segundo_apellido,
-        correo,num_telefono,direccion_id,rol, 
-        CAST(AES_DECRYPT(contrasena,@key) AS CHAR(100)) AS contrasena,
-        CAST(AES_DECRYPT(num_tarjeta,@key) AS CHAR(30)) AS num_tarjeta
-    FROM Usuarios WHERE correo = email;
-END$$
+
+INSERT INTO Envios(nombre_empresa,num_telefono,correo) VALUES
+    ("Rapienvios","9897-9867","rapienvios@gmail.com")
+;

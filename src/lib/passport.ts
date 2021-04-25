@@ -53,7 +53,9 @@ passport.use(
       passReqToCallback: true,
     },
     async (req: Request & any, correo: string, contrasena: string, done: any) => {
+      console.log("body sign in: ", req.body);
       const rows = await db.query(`call sp_obtenerUsuario( ? )`, correo);
+      console.log("rows: ", rows);
       if (rows.length > 0) {
         const user = rows[0][0];
         console.log("user: ", user);

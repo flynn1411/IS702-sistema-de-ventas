@@ -107,7 +107,7 @@ CREATE TABLE Ordenes_Compras(
     cantidad INT NOT NULL,
     precio_compra INT NOT NULL,
     fecha_orden TIMESTAMP NOT NULL,
-    estado BOOL NOT NULL,
+    estado BOOL NOT NULL DEFAULT FALSE,
     FOREIGN KEY (proveedor_id) REFERENCES Proveedores(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (producto_id) REFERENCES Productos(id)
@@ -202,7 +202,7 @@ CREATE TABLE Tipos_Docmentos (
 
 CREATE TABLE Envios (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_empresas VARCHAR(50) NOT NULL,
+    nombre_empresa VARCHAR(50) NOT NULL,
     num_telefono VARCHAR(30) NOT NULL,
     correo VARCHAR(50)
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Envios';
@@ -228,8 +228,8 @@ CREATE TABLE Config_Facturas (
 CREATE TABLE Pagos (
     id INT PRIMARY KEY AUTO_INCREMENT,
     metodo_pago ENUM("efectivo","tarjeta","cuenta") DEFAULT "efectivo",
-    efectivo_recibido DECIMAL(10,2) NOT NULL,
-    vuelto_entregado DECIMAL(10,2) NOT NULL
+    efectivo_recibido DECIMAL(10,2),
+    vuelto_entregado DECIMAL(10,2)
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Pagos';
 
 CREATE TABLE Facturas (
@@ -243,7 +243,7 @@ CREATE TABLE Facturas (
     exonerado DECIMAL(10,2),
     total DECIMAL(10,2),
     pago_id INT,
-    estado_pago BOOL NOT NULL,
+    estado_pago BOOL NOT NULL DEFAULT FALSE,
     en_linea BOOL NOT NULL,
     envio_id INT
 ) ENGINE=InnoDB COLLATE=utf8_unicode_ci AUTO_INCREMENT =1 COMMENT='Tabla de Facturas';
@@ -251,6 +251,7 @@ CREATE TABLE Facturas (
 CREATE TABLE Facturas_x_Productos (
     factura_id INT NOT NULL,
     producto_id INT NOT NULL,
+    cantidad INT,
     FOREIGN KEY (factura_id) REFERENCES Facturas(id)
     ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (producto_id) REFERENCES Productos(id)

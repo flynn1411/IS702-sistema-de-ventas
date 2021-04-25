@@ -333,3 +333,7 @@ INSERT INTO Inventario(sucursales_id,producto_id,existencia,descripcion,tipo_imp
     (1,1,400,"Comptadora macbook",1,0,17232.23),
     (2,3,1000,"Mac mini",1,0,32323.23)
 ;
+
+INSERT INTO Envios(nombre_empresa,num_telefono,correo) VALUES
+    ("Rapienvios","9897-9867","rapienvios@gmail.com")
+;

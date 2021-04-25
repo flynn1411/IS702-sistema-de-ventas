@@ -2,9 +2,6 @@ USE SistemaVentas;
 
 DELIMITER $$
 
--- Contraseña de Encriptado
-SET @key = "admin";
-
 -- Mostrar Fabricante
 DROP PROCEDURE IF EXISTS sp_obtenerFabricante$$
 CREATE PROCEDURE sp_obtenerFabricante()
@@ -68,33 +65,88 @@ END$$
 -- Crear una Factura
 DROP PROCEDURE IF EXISTS sp_crearFactura$$
 CREATE PROCEDURE sp_crearFactura(
-    IN Correo VARCHAR(50),
-    IN MetodoPago VARCHAR(50)
+    IN CORREO VARCHAR(50),
+    IN METODOPAGO VARCHAR(50)
 )
 BEGIN
-    DECLARE Direccion INT;
-    DECLARE Usuario INT;
- 
-    SELECT @Direccion = (SELECT direccion_id FROM Usuarios WHERE correo = Correo LIMIT 1);
-    SELECT @Usuario = (SELECT id FROM Usuarios WHERE correo = Correo LIMIT 1);
+    DECLARE d INT;
+    DECLARE u INT;
+    DECLARE m VARCHAR(50);
+    DECLARE p INT;
+
+    SET @m = METODOPAGO;        
+    SET @d = (SELECT direccion_id FROM Usuarios WHERE correo = CORREO LIMIT 1);
+    SET @u = (SELECT id FROM Usuarios WHERE correo = CORREO LIMIT 1);
 
     INSERT INTO 
-        Facturas(usuario_id,direccion_id,config_factura_id,estado_pago,en_linea)
+        Pagos(metodo_pago)
     VALUES
-        (Usuario,Direccion,1,0,1)
+        (@m)
+    ;
+
+    SET @p = (SELECT id FROM Pagos ORDER BY id DESC LIMIT 1);
+
+    INSERT INTO 
+        Facturas(usuario_id,direccion_id,config_factura_id,estado_pago,en_linea,pago_id,total)
+    VALUES
+        (@u,@d,1,0,1,@p,0)
     ;
 
 END$$
 
 -- Cambiar estado de orden de compra
-DROP PROCEDURE IF EXISTS sp_cambiarEstadoFactura$$
+DROP PROCEDURE IF EXISTS sp_cambiarEstadoCompra$$
+CREATE PROCEDURE sp_cambiarEstadoCompra(
+    IN ID INT
+)
+BEGIN
+    UPDATE 
+	    Ordenes_Compras
+    SET 
+	    estado = 1
+    WHERE 
+	    id = ID
+    ;
+END$$
 
 
 -- Unir factura con productos
-DROP PROCEDURE IF EXISTS sp_factura_x_producto$$
-CREATE PROCEDURE sp_factura_x_producto()
+DROP PROCEDURE IF EXISTS sp_vincularFactura$$
+CREATE PROCEDURE sp_vincularFactura(
+    IN FACTURA INT,
+    IN PRODUCTO INT,
+    IN CANTIDAD INT
+)
 BEGIN
+    DECLARE f INT;
+    DECLARE p INT;
+    DECLARE i INT;
+    DECLARE Iactual INT;
 
+    SET @f = FACTURA; 
+    SET @p = PRODUCTO;
+    SET @i = CANTIDAD;
+    SET @Iactual = (SELECT existencia FROM Inventario WHERE producto_id = @p ORDER BY id DESC LIMIT 1);
+
+    INSERT INTO Facturas_x_Productos
+        (factura_id, producto_id,cantidad)
+    VALUES
+        (@f,@p,@i)
+    ;
+
+    UPDATE
+        Inventario
+    SET
+        existencia = @Iactual - @i
+    WHERE
+        id = @inv
+    ;
+
+    INSERT INTO 
+        mov_inventario(producto_id,movimiento_id,cantidad,precio) 
+    VALUES 
+        (@p,1,@i,(SELECT subtotal FROM Inventario WHERE producto_id = @p ORDER BY id DESC LIMIT 1));
+        
 END$$
 
 -- Mostrar datos de usuario
@@ -110,8 +162,8 @@ BEGIN
     SELECT 
         id,primer_nombre, segundo_nombre, primer_apellido, segundo_apellido,
         correo,num_telefono,direccion_id,rol, 
-        CAST(AES_DECRYPT(contrasena,@key) AS CHAR(100)) AS contrasena,
-        CAST(AES_DECRYPT(num_tarjeta,@key) AS CHAR(30)) AS num_tarjeta
+        CAST(AES_DECRYPT(contrasena,"admin") AS CHAR(100)) AS contrasena,
+        CAST(AES_DECRYPT(num_tarjeta,"admin") AS CHAR(30)) AS num_tarjeta
     FROM 
         Usuarios
     WHERE 
@@ -139,4 +191,83 @@ BEGIN
     ;
 END$$
 
+-- Crear orden de compra
+DROP PROCEDURE IF EXISTS sp_crearOrden$$
+CREATE PROCEDURE sp_crearOrden(
+    IN PROVEEDOR INT,
+    IN PRODUCTO INT,
+    IN CANTIDAD INT,
+    IN PRECIO DECIMAL(10,2)
+)
+BEGIN
+    INSERT INTO Ordenes_Compras
+        (proveedor_id,producto_id,cantidad,precio_compra)
+    VALUES
+        (PROVEEDOR,PRODUCTO,CANTIDAD,PRECIO)
+    ;
+END$$
+
+-- Obtener Pago
+DROP PROCEDURE IF EXISTS sp_obtenerPagos$$
+CREATE PROCEDURE sp_obtenerPagos()
+BEGIN
+    SELECT * FROM Pagos;
+END$$
+
+-- Obtener Facturas
+DROP PROCEDURE IF EXISTS sp_obtenerFacturas$$
+CREATE PROCEDURE sp_obtenerFacturas()
+BEGIN
+    SELECT * FROM Facturas;
+END$$
+
+-- Obtener Inventario
+DROP PROCEDURE IF EXISTS sp_obtenerInventario$$
+CREATE PROCEDURE sp_obtenerInventario()
+BEGIN
+    SELECT * FROM Inventario;
+END$$
+
+-- Obtener facturas x productos
+DROP PROCEDURE IF EXISTS sp_obtenerFacPro$$
+CREATE PROCEDURE sp_obtenerFacPro()
+BEGIN
+    SELECT * FROM Facturas_x_Productos;
+END$$
+
+-- Obtener ordenes de computadoras
+DROP PROCEDURE IF EXISTS sp_obtenerOrdenes$$
+CREATE PROCEDURE sp_obtenerOrdenes()
+BEGIN
+    SELECT * FROM Ordenes_Compras;
+END$$
+
+-- Obtener movimiento de inventario
+DROP PROCEDURE IF EXISTS sp_obtenerMovimiento$$
+CREATE PROCEDURE sp_obtenerMovimiento()
+BEGIN
+    SELECT * FROM Mov_Inventario;
+END$$
+
+-- Obtener empresa de envio
+DROP PROCEDURE IF EXISTS sp_obtenerEnvio$$
+CREATE PROCEDURE sp_obtenerEnvio()
+BEGIN
+    SELECT * FROM Envios;
+END$$
+
+-- Cambiar estado de pago
+DROP PROCEDURE IF EXISTS sp_cambiarPago$$
+CREATE PROCEDURE sp_cambiarPago(
+    IN ID INT
+)
+BEGIN
+    UPDATE 
+        Facturas
+    SET 
+        estado_pago = 1, envio_id = 1
+    WHERE
+        id = ID
+;
+END$$
 DELIMITER ;

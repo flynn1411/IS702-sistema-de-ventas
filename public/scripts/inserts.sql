@@ -336,8 +336,13 @@ INSERT INTO Productos(fabricante_id,tipo_id,modelo,descripcion) VALUES
 ;
 
 INSERT INTO Inventario(sucursales_id,producto_id,existencia,descripcion,tipo_impuesto_id,impuesto,subtotal) VALUES
-    (1,1,400,"Comptadora macbook",1,0,17232.23),
-    (2,3,1000,"Mac mini",1,0,32323.23)
+    (4,4,1000,"Inventario nuevo",1,0,32323.23),
+    (1,5,500,"Inventario nuevo",1,0,175.23),
+    (2,6,6000,"Inventario nuevo",1,0,443.23),
+    (3,7,100,"Inventario nuevo",1,0,266.23),
+    (4,8,1300,"Inventario nuevo",1,0,4323.23),
+    (4,9,1100,"Inventario nuevo",1,0,134),
+    (4,10,420,"Inventario nuevo",1,0,1200)
 ;
 DELIMITER $$
 DROP PROCEDURE IF EXISTS sp_obtenerUser$$

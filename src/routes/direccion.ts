@@ -3,8 +3,8 @@ import {
     obtenerDirecciones
 } from "./../controllers/direccion";
 
-const FabricantesRouter = Router();
+const DireccionRouter = Router();
 
-FabricantesRouter.get("/list", obtenerDirecciones);
+DireccionRouter.get("/list", obtenerDirecciones);
 
-export default FabricantesRouter;
+export default DireccionRouter;

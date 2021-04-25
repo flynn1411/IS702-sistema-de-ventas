@@ -56,7 +56,7 @@ passport.use(
       console.log("body sign in: ", req.body);
       const rows = await db.query(`call sp_obtenerUsuario( ? )`, correo);
       console.log("rows: ", rows);
-      if (rows.length > 0) {
+      if (rows[0].length > 0) {
         const user = rows[0][0];
         console.log("user: ", user);
         console.log("pass1: ", user.contrasena);

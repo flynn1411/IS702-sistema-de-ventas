@@ -8,7 +8,7 @@ BEGIN
     INSERT INTO Inventario(sucursales_id,producto_id,existencia,descripcion,tipo_impuesto_id,impuesto,subtotal) 
     VALUES (1,new.producto_id,new.cantidad,"Pedido Completado",1,(0.15 * new.precio_compra),new.precio_compra + (0.15 * new.precio_compra));
     
-    INSERT INTO mov_inventario(producto_id,movimiento_id,cantidad,precio) 
+    INSERT INTO Mov_Inventario(producto_id,movimiento_id,cantidad,precio) 
     VALUES (new.producto_id,2,new.cantidad,new.precio_compra);
     
 END $$

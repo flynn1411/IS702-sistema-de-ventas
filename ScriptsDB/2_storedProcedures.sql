@@ -143,7 +143,7 @@ BEGIN
     ;
 
     INSERT INTO 
-        mov_inventario(producto_id,movimiento_id,cantidad,precio) 
+        Mov_Inventario(producto_id,movimiento_id,cantidad,precio) 
     VALUES 
         (@p,1,@i,(SELECT subtotal FROM Inventario WHERE producto_id = @p ORDER BY id DESC LIMIT 1));
         
@@ -218,14 +218,75 @@ END$$
 DROP PROCEDURE IF EXISTS sp_obtenerFacturas$$
 CREATE PROCEDURE sp_obtenerFacturas()
 BEGIN
-    SELECT * FROM Facturas;
+    SELECT
+    Facturas.id AS id,
+    Facturas.usuario_id AS usuario_id,
+    Usuarios.primer_nombre AS primer_nombre,
+    Usuarios.primer_apellido AS primer_apellido,
+    Facturas.direccion_id AS direccion_id,
+    Direcciones.calle AS calle,
+    Facturas.config_factura_id AS config_factura_id,
+    Facturas.num_factura AS num_factura,
+    Facturas.fecha AS fecha,
+    Facturas.exento AS exento,
+    Facturas.exonerado AS exonerado,
+    Facturas.total AS total,
+    Facturas.pago_id AS pago_id,
+    Pagos.metodo_pago AS metodo_pago,
+    Facturas.estado_pago AS estado_pago,
+    Facturas.en_linea AS en_linea,
+    Facturas.envio_id AS envio_id,
+    Envios.nombre_empresa AS nombre_empresa 
+    FROM 
+        Facturas
+    INNER JOIN 
+        Usuarios
+    ON 
+        Facturas.usuario_id = Usuarios.id
+    INNER JOIN
+        Direcciones
+    ON
+        Facturas.direccion_id = Direcciones.id
+    INNER JOIN
+        Pagos
+    ON 
+        Facturas.pago_id = Pagos.id
+    INNER JOIN
+        Envios
+    ON
+        Facturas.envio_id = Envios.id
+    ;
 END$$
 
 -- Obtener Inventario
 DROP PROCEDURE IF EXISTS sp_obtenerInventario$$
 CREATE PROCEDURE sp_obtenerInventario()
 BEGIN
-    SELECT * FROM Inventario;
+
+    SELECT
+            Productos.id as "id",
+            Productos.modelo as "nombre",
+            Productos.tipo_id,
+            Tipos.nombre as "categoria",
+            Fabricantes.nombre as "fabricante",
+            Productos.fabricante_id,
+            Inventario.existencia as "existencia",
+            Inventario.subtotal as "precio"
+    FROM
+        Inventario
+    INNER JOIN
+        Productos
+    ON
+        Inventario.producto_id = Productos.id
+    INNER JOIN
+        Tipos
+    ON
+        Tipos.id = Productos.tipo_id
+    INNER JOIN
+            Fabricantes
+    ON 
+    Fabricantes.id = Productos.fabricante_id
+    ;
 END$$
 
 -- Obtener facturas x productos
@@ -235,11 +296,25 @@ BEGIN
     SELECT * FROM Facturas_x_Productos;
 END$$
 
--- Obtener ordenes de computadoras
+-- Obtener ordenes de compras
 DROP PROCEDURE IF EXISTS sp_obtenerOrdenes$$
 CREATE PROCEDURE sp_obtenerOrdenes()
 BEGIN
-    SELECT * FROM Ordenes_Compras;
+    SELECT 
+        Ordenes_Compras.id AS id, Proveedores.nombre AS provedores,Productos.modelo AS producto, 
+        Ordenes_Compras.cantidad AS cantidad,Ordenes_Compras.precio_compra AS precio_compra, 
+        Ordenes_Compras.fecha_orden AS fecha_orden, Ordenes_Compras.estado AS estado
+    FROM 
+        Ordenes_Compras 
+    INNER JOIN 
+        Proveedores 
+    ON 
+        Ordenes_Compras.proveedor_id = Proveedores.id
+	INNER JOIN 
+		Productos
+	ON 
+		Ordenes_Compras.producto_id = Productos.id
+    ;
 END$$
 
 -- Obtener movimiento de inventario
@@ -270,4 +345,72 @@ BEGIN
         id = ID
 ;
 END$$
+
+-- Obtener Inventario por Tipo
+DROP PROCEDURE IF EXISTS sp_obtenerInventarioTipo$$
+CREATE PROCEDURE sp_obtenerInventarioTipo(
+    IN ID INT
+)
+BEGIN
+    SELECT
+            Productos.id as "id",
+            Productos.modelo as "nombre",
+            Productos.tipo_id,
+            Tipos.nombre as "categoria",
+            Fabricantes.nombre as "fabricante",
+            Productos.fabricante_id,
+            Inventario.existencia as "existencia",
+            Inventario.subtotal as "precio"
+        FROM
+            Inventario
+        INNER JOIN
+                Productos
+        ON
+                Inventario.producto_id = Productos.id
+        INNER JOIN
+                Tipos
+        ON
+                Tipos.id = Productos.tipo_id
+        INNER JOIN
+                Fabricantes
+        ON
+                Fabricantes.id = Productos.fabricante_id
+        WHERE 
+            Productos.tipo_id = ID
+    ;
+END$$
+
+-- Obtener Inventario por fabricante
+DROP PROCEDURE IF EXISTS sp_obtenerInventarioFabricante$$
+CREATE PROCEDURE sp_obtenerInventarioFabricante(
+    IN ID INT
+)
+BEGIN
+        SELECT 
+            Productos.id as "id",
+            Productos.modelo as "nombre",
+            Productos.tipo_id,
+            Tipos.nombre as "categoria",
+            Fabricantes.nombre as "fabricante",
+            Productos.fabricante_id,
+            Inventario.existencia as "existencia",
+            Inventario.subtotal as "precio"
+        FROM
+            Inventario
+        INNER JOIN
+            Productos
+        ON
+            Inventario.producto_id = Productos.id
+        INNER JOIN
+            Tipos
+        ON
+            Tipos.id = Productos.tipo_id
+        INNER JOIN
+            Fabricantes
+        ON Fabricantes.id = Productos.fabricante_id
+        ;
+END$$
 DELIMITER ;
+
+
+

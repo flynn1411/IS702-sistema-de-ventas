@@ -48,7 +48,7 @@ exports.obtenerProductos = (req, res) => {
 };
 exports.obtenerProductosPorCategoria = (req, res) => {
     console.log("obtener productos por categoria");
-    const id = req.body.id;
+    const id = Number(req.params.id);
     const query = `
         SELECT
             Productos.id as "id",
@@ -85,7 +85,7 @@ exports.obtenerProductosPorCategoria = (req, res) => {
 };
 exports.obtenerProductosPorFabricante = (req, res) => {
     console.log("obtener productos por fabricante");
-    const id = req.body.id;
+    const id = Number(req.params.id);
     const query = `
         SELECT
             Productos.id as "id",
@@ -122,7 +122,7 @@ exports.obtenerProductosPorFabricante = (req, res) => {
 };
 exports.obtenerProducto = (req, res) => {
     console.log("obtener producto");
-    const id = req.body.id;
+    const id = Number(req.params.id);
     const query = `
         SELECT
             Productos.id as "id",

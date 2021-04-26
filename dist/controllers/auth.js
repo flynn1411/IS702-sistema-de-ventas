@@ -7,7 +7,7 @@ exports.registerUser = (req, res, next) => {
         if (err !== null) {
             return res.status(200).json({ err });
         }
-        return res.status(200).json({ user, token: jwt.sign({ user }, "my_secret_key") });
+        return res.status(200).json({ user });
     })(req, res, next);
 };
 exports.loginUser = (req, res, next) => {
@@ -15,7 +15,7 @@ exports.loginUser = (req, res, next) => {
         if (err !== null) {
             return res.status(200).json({ err });
         }
-        return res.status(200).json({ status: "SUCCESS", user, token: jwt.sign({ user }, "my_secret_key") });
+        return res.status(200).json({ status: "SUCCESS", user });
     })(req, res, next);
 };
 exports.logoutUser = (req, res) => {

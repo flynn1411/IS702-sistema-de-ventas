@@ -12,7 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import LoginForm from '../interfaces/LoginForm';
-import { Link as LinkRoute } from 'react-router-dom';
+import {instanceOfUser} from '../interfaces/User';
+import { Link as LinkRoute, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,9 +35,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+/*########################## VISTA DE LogIn #####################################*/
 function LogIn() {
   const classes = useStyles();
   const [loginErr, setLoginErr] = useState<boolean>(false);
+  const history = useHistory();
 
   function mostrarError(){
     return(
@@ -45,22 +48,25 @@ function LogIn() {
   }
 
   //const url: string = 'http://localhost:3000/api/v1/auth/login';
-  const url: string = 'http://ec2-3-133-125-192.us-east-2.compute.amazonaws.com:3000/api/v1/auth/login';
+  const url: string = 'http://3.95.214.239:3000/api/v1/auth/login';
 
   function verificarDatos(e: React.FocusEvent<HTMLFormElement>){
     e.preventDefault();
 
     let datos: LoginForm = {"correo": e.target.email.value,"contrasena": e.target.password.value};
+    //console.log(datos);
 
     fetch(url, {
       method: 'POST',
       headers: {'Content-Type': 'application/json','Accept': 'application/json'},
       body: JSON.stringify(datos)
-    }).then(respuesta => respuesta.json()).then( resJSON =>{
-      //console.log(resJSON);
-      if(!resJSON.err){
+    }
+    ).then(respuesta => respuesta.json()).then( resJSON =>{
+      //console.log(instanceOfUser(resJSON.user));
+      if(resJSON.status==="SUCCESS" && instanceOfUser(resJSON.user)){
         setLoginErr(false);
         localStorage.setItem("LOCAL_USER",JSON.stringify(resJSON.user));
+        history.push("/");
 
       }else{
         setLoginErr(true);

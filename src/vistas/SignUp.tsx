@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,8 +9,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Link as LinkRoute } from 'react-router-dom';
+import { Link as LinkRoute, useHistory } from 'react-router-dom';
 import SignUpForm from '../interfaces/SignUpForm';
+import {instanceOfUser} from '../interfaces/User';
+import ObjDireccion from '../interfaces/ObjDireccion';
+import { MenuItem } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,9 +35,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+var templateDirecciones: ObjDireccion[] = [{"id":1, "calle": "Hubo un error"}];
+
+/*########################## VISTA DE SIGNUP #####################################*/
 function SignUp() {
   const classes = useStyles();
   const [ registerErr, setRegisterErr ] = useState(false);
+  const [direccionesObtenidas, setDirecciones] = useState<ObjDireccion[]>(templateDirecciones);
+  const [ direccionActual, setDireccionActual ] = useState<number>(1);
+  const history = useHistory();
+
+  const handleDireccionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDireccionActual(parseInt(event.target.value));
+  };
+
+  async function obtenerDirecciones(){
+    let direcciones: ObjDireccion[];
+    let direccionUrl = 'http://3.95.214.239:3000/api/v1/direccion/list';
+  
+    fetch(direccionUrl, {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json','Accept': 'application/json'}
+      }).then(respuesta => respuesta.json()).then( resJSON =>{
+        direcciones = resJSON;
+        setDirecciones(direcciones);
+  
+      }).catch(err => {
+        console.log(err);
+      });
+  }
+
+  useEffect(()=>{
+    obtenerDirecciones();
+  }, []);
+
+  //obtenerDirecciones();
 
   function mostrarError(){
     return(
@@ -43,7 +78,7 @@ function SignUp() {
   }
 
   //const url: string = 'http://localhost:3000/api/v1/auth/register';
-  const url: string = 'http://ec2-3-133-125-192.us-east-2.compute.amazonaws.com:3000/api/v1/auth/register';
+  const url: string = 'http://3.95.214.239:3000/api/v1/auth/register';
 
   function registrarUsuario(e: React.FocusEvent<HTMLFormElement>){
     e.preventDefault();
@@ -56,18 +91,23 @@ function SignUp() {
       correo: e.target.email.value,
       contrasena: e.target.password.value,
       num_telefono: e.target.phone.value,
-      direccion_id: 18,
+      direccion_id: e.target.direccion.value,
       rol: 2
     };
+
+    //console.log(datos);
 
     fetch(url, {
       method: 'POST',
       headers: {'Content-Type': 'application/json','Accept': 'application/json'},
       body: JSON.stringify(datos)
     }).then(respuesta => respuesta.json()).then( resJSON =>{
-      if(!resJSON.err){
-        //guardar el usuario en localstorage y redireccionar
+
+      if(resJSON.status==="SUCCESS" && instanceOfUser(resJSON.user)){
+        localStorage.setItem("LOCAL_USER",JSON.stringify(resJSON.user));
         setRegisterErr(false);
+        history.push("/");
+
       }else{
         setRegisterErr(true);
       }
@@ -159,6 +199,23 @@ function SignUp() {
             autoComplete="phone"
             autoFocus
           />
+          <TextField
+            id="direccion"
+            name="direccion"
+            select
+            value={direccionActual}
+            onChange={handleDireccionChange}
+            label="Dirección"
+            helperText="Seleccione una dirección"
+          >
+            {
+              direccionesObtenidas.map((direccion) => (
+                <MenuItem key={direccion.id} value={direccion.id}>
+                  {direccion.calle}
+                </MenuItem>
+              ))
+            }
+          </TextField>
           <Button
             type="submit"
             fullWidth

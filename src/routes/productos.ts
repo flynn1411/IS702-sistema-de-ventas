@@ -8,7 +8,7 @@ import {
 
 const ProductoRouter = Router();
 ProductoRouter.get("/list", obtenerProductos);
-ProductoRouter.get("/list-per-category/:id", obtenerProductosPorCategoria);
-ProductoRouter.get("/list-per-manufacturer/:id", obtenerProductosPorFabricante);
-ProductoRouter.get("/product/:id", obtenerProducto);
+ProductoRouter.get("/list-per-category", obtenerProductosPorCategoria);
+ProductoRouter.get("/list-per-manufacturer", obtenerProductosPorFabricante);
+ProductoRouter.get("/product", obtenerProducto);
 export default ProductoRouter;

@@ -156,18 +156,18 @@ export default function Catalogo(){
     }
 
     function obtenerProductos(categoria: string):void{
-        let url='http://ec2-3-95-214-239.compute-1.amazonaws.com:3000/api/v1/productos/list'
+        let url=`http://ec2-3-95-214-239.compute-1.amazonaws.com:3000/api/v1/productos/list-per-category/${categoria}`;
 
         if(categoria==="ALL"){
             obtenerTodosProd();
         }else{
 
-            let datos = {"id": parseInt(categoria)};
+            //let datos = {"id": parseInt(categoria)};
     
             fetch(url, {
                 method: 'GET',
-                headers: {'Content-Type': 'application/json','Accept': 'application/json'},
-                body: JSON.stringify(datos)
+                headers: {'Content-Type': 'application/json','Accept': 'application/json'}
+                //body: JSON.stringify(datos)
               }).then(respuesta => respuesta.json()).then( resJSON =>{
                 if(resJSON instanceof Array){
                     //console.log(resJSON)
@@ -197,6 +197,11 @@ export default function Catalogo(){
     function logOut(){
         localStorage.removeItem("LOCAL_USER");
         history.push("/login");
+    }
+
+    function cambiarCategoria(categoria: string){
+        setCategoriaActual(categoria);
+        obtenerProductos(categoria);
     }
 
     return (
@@ -268,31 +273,31 @@ export default function Catalogo(){
                 </div>
                 <Divider/>
                 <List>
-                    <ListItem button key="Todas">
+                    <ListItem button key="Todas" onClick={()=>cambiarCategoria("ALL")}>
                         <ListItemIcon>
                             <HomeIcon/>
                         </ListItemIcon>
                         <ListItemText primary={"Todos"}/>
                     </ListItem>
-                    <ListItem button key="Computadoras">
+                    <ListItem button key="Computadoras" onClick={()=>cambiarCategoria("1")}>
                         <ListItemIcon>
                             <ComputerIcon/>
                         </ListItemIcon>
                         <ListItemText primary={"Computadoras"}/>
                     </ListItem>
-                    <ListItem button key="Camaras">
+                    <ListItem button key="Camaras" onClick={()=>cambiarCategoria("2")}>
                         <ListItemIcon>
                             <PhotoCameraIcon/>
                         </ListItemIcon>
                         <ListItemText primary={"Camaras"}/>
                     </ListItem>
-                    <ListItem button key="Telefonos">
+                    <ListItem button key="Telefonos" onClick={()=>cambiarCategoria("3")}>
                         <ListItemIcon>
                             <SmartphoneIcon/>
                         </ListItemIcon>
                         <ListItemText primary={"Telefonos"}/>
                     </ListItem>
-                    <ListItem button key="Televisores">
+                    <ListItem button key="Televisores" onClick={()=>cambiarCategoria("4")}>
                         <ListItemIcon>
                             <TvIcon/>
                         </ListItemIcon>

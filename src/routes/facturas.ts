@@ -1,16 +1,16 @@
 import { Router } from "express";
 import {
     agregarFactura,
-    editarFactura,
-    eliminarFactura,
-    obtenerFactura
+    obtenerFacturas,
+    pagarFactura,
+    vincularProducto,
 } from "./../controllers/facturas";
 
 const FacturaRouter = Router();
 
-FacturaRouter.post("/agregar-factura-producto", agregarFactura);
-FacturaRouter.put("/update/:id", editarFactura);
-FacturaRouter.get("/get/:id", obtenerFactura);
-FacturaRouter.delete("/delete/:id", eliminarFactura);
+FacturaRouter.post("/create", agregarFactura);
+FacturaRouter.get("/list", obtenerFacturas);
+FacturaRouter.put("/pagar-factura", pagarFactura);
+FacturaRouter.put("/vincular-producto", vincularProducto);
 
 export default FacturaRouter;

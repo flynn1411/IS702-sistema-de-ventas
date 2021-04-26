@@ -2,51 +2,62 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const db = require("../db_connection");
 exports.agregarFactura = (req, res) => {
-    const product = req.body;
-    const query = "";
-    const result = db.query(query);
+    const body = req.body;
+    const products = body.productos;
+    const result = db.query(`
+        call sp_crearFactura('${body.correo}', '${body.metodo}')
+    `);
     result.then((resultP) => {
-        res.status(200).send(resultP);
+        const result2 = db.query("SELECT id FROM Facturas ORDER BY id DESC LIMIT 1");
+        result2.then((resultId) => {
+            const lastId = resultId[0].id;
+            console.log("last", lastId);
+            res.status(200).json({ factura_id: lastId });
+        });
     })
         .catch((err) => {
         res.status(500).json({ message: "Error al crear factura", error: err });
     });
-    console.log("result: ", result.then);
 };
-exports.editarFactura = (req, res) => {
-    const product = req.body;
-    const id = Number(req.params);
-    const query = "";
-    const result = db.query(query);
+exports.vincularProducto = (req, res) => {
+    const body = req.body;
+    console.log("vincular body: ", body);
+    const result = db.query(`
+        call sp_vincularFactura(${body.factura_id}, ${body.producto_id}, ${body.cantidad})
+    `);
     result.then((resultP) => {
-        res.status(200).send(resultP);
+        res.status(200).json(resultP);
     })
         .catch((err) => {
-        res.status(500).json({ message: "Error al editar factura", error: err });
+        res.status(500).json({ message: "Error al vincular producto", error: err });
     });
 };
-exports.obtenerFactura = (req, res) => {
-    const id = req.params;
-    const query = "";
+exports.obtenerFacturas = (req, res) => {
+    const query = "call sp_obtenerFacturas";
     const result = db.query(query);
     result.then((resultP) => {
-        res.status(200).send(resultP);
+        res.status(200).send(resultP[0]);
     })
         .catch((err) => {
         res.status(500).json({ message: "Error al obtener factura", error: err });
     });
 };
-exports.eliminarFactura = (req, res) => {
-    const id = req.params;
-    const query = "";
-    const result = db.query(query);
+exports.pagarFactura = (req, res) => {
+    const body = req.body;
+    const result = db.query(`
+        UPDATE
+            Facturas
+        SET
+            estado_pago = 1, envio_id = 1
+        WHERE
+            id = ${body.factura_id}
+        ;
+    `);
     result.then((resultP) => {
-        console.log("result: ", resultP);
         res.status(200).send(resultP);
     })
         .catch((err) => {
-        console.error("Error al eliminar producto: ", err);
-        res.status(500).json({ message: "Error al eliminar factura", error: err });
+        res.status(500).json({ message: "Error al pagar factura", error: err });
     });
     console.log("result: ", result);
 };

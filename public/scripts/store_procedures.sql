@@ -17,7 +17,7 @@ DROP PROCEDURE IF EXISTS sp_obtenerTipo$$
 CREATE PROCEDURE sp_obtenerTipo()
 BEGIN
     SELECT 
-        id,nombre as "Nombre" 
+        id,nombre as "Nombre"
     FROM 
         Tipos; 
 END$$
@@ -74,7 +74,7 @@ BEGIN
     DECLARE m VARCHAR(50);
     DECLARE p INT;
 
-    SET @m = METODOPAGO;        
+    SET @m = METODOPAGO;
     SET @d = (SELECT direccion_id FROM Usuarios WHERE correo = CORREO LIMIT 1);
     SET @u = (SELECT id FROM Usuarios WHERE correo = CORREO LIMIT 1);
 

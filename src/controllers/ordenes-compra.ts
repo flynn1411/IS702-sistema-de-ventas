@@ -15,18 +15,6 @@ export const agregarOrdenCompra = async (req: Request & any, res: Response) => {
     console.log("result: ", result.then);
 };
 
-export const obtenerOrdenCompra = (req: Request & any, res: Response) => {
-    const id = req.params;
-    const query = "";
-    const result: Promise<any> = db.query(`call sp_`);
-    result.then((resultP: any) => {
-        res.status(200).send(resultP);
-    })
-    .catch((err: any) => {
-        res.status(500).json({ message: "Error al obtener OrdenCompra", error: err });
-    });
-};
-
 export const obtenerOrdenesCompra = (req: Request & any, res: Response) => {
     const query = "call sp_obtenerOrdenes";
     const result: Promise<any> = db.query(query);

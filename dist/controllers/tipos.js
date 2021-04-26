@@ -6,7 +6,7 @@ exports.obtenerTipos = (req, res) => {
     const query = "call sp_obtenerTipo";
     const result = db.query(query);
     result.then((resultP) => {
-        res.status(200).send(resultP);
+        res.status(200).send(resultP[0]);
     })
         .catch((err) => {
         res.status(500).json({ message: "Error al obtener Tipo", error: err });

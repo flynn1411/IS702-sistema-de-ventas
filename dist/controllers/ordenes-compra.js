@@ -22,17 +22,6 @@ exports.agregarOrdenCompra = (req, res) => __awaiter(this, void 0, void 0, funct
     });
     console.log("result: ", result.then);
 });
-exports.obtenerOrdenCompra = (req, res) => {
-    const id = req.params;
-    const query = "";
-    const result = db.query(`call sp_`);
-    result.then((resultP) => {
-        res.status(200).send(resultP);
-    })
-        .catch((err) => {
-        res.status(500).json({ message: "Error al obtener OrdenCompra", error: err });
-    });
-};
 exports.obtenerOrdenesCompra = (req, res) => {
     const query = "call sp_obtenerOrdenes";
     const result = db.query(query);

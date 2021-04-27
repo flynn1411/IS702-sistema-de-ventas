@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { Badge, Card, CardContent, Container, createStyles, CssBaseline, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Theme, Toolbar } from "@material-ui/core";
+import { Badge, Card, CardContent, createStyles, CssBaseline, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Theme, Toolbar } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import AppBar from "@material-ui/core/AppBar";
 import { useHistory } from "react-router";
@@ -110,7 +110,7 @@ const templateProductos: Producto[] = [{
 let foundCategory = localStorage.getItem("CATEGORY");
 
 var categoria:string = foundCategory ? foundCategory : "ALL";
-var templateFabricante: Fabricante[] = [{"id":1, "Nombre": "Apple"}]
+var templateFabricante: Fabricante[] = [{"id":1, "Nombre": "Apple"}];
 
 export default function Catalogo(){
     const history = useHistory();
@@ -120,6 +120,7 @@ export default function Catalogo(){
     const [ productos, setProductos ] = useState<Producto[]>(templateProductos);
     const [categoriaActual, setCategoriaActual] = useState<string>(categoria);
     const [ fabricantes, setFabricantes] = useState<Fabricante[]>(templateFabricante);
+    const [currentTitle, setCurrentTitle] = useState<string>("Categoria: Todas");
 
     function obtenerTodosProd():void{
         let url='http://ec2-3-95-214-239.compute-1.amazonaws.com:3000/api/v1/productos/list';
@@ -200,6 +201,25 @@ export default function Catalogo(){
     }
 
     function cambiarCategoria(categoria: string){
+        switch (categoria) {
+            case "1":
+                setCurrentTitle("Categoria: Computadoras");
+                break;
+            case "2":
+                setCurrentTitle("Categoria: Camaras");
+                break;
+            case "3":
+                setCurrentTitle("Categoria: Telefonos");
+                break;
+            case "4":
+                setCurrentTitle("Categoria: Televisores");
+                break;
+                
+            default:
+                setCurrentTitle("Categoria: Todas");
+                break;
+        }
+
         setCategoriaActual(categoria);
         obtenerProductos(categoria);
     }
@@ -226,7 +246,7 @@ export default function Catalogo(){
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Catálogo de Productos
+                        {currentTitle}
                     </Typography>
                     <div id="iconosUsuario" className={classes.rightToolbar}>
                         <IconButton

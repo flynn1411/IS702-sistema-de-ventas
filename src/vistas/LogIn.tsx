@@ -62,7 +62,7 @@ function LogIn() {
       body: JSON.stringify(datos)
     }
     ).then(respuesta => respuesta.json()).then( resJSON =>{
-      //console.log(instanceOfUser(resJSON.user));
+      //console.log(resJSON);
       if(resJSON.status==="SUCCESS" && instanceOfUser(resJSON.user)){
         setLoginErr(false);
         localStorage.setItem("LOCAL_USER",JSON.stringify(resJSON.user));
